@@ -1,0 +1,5 @@
+# Dépendances pour l'application de gestion d'appareils électroménagers
+# Tkinter est inclus avec Python standard, mais précisé ici pour la clarté
+# Python >= 3.7 recommandé
+
+tkinter 
