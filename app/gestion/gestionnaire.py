@@ -21,61 +21,64 @@ class GestionnaireAppareils:
 
     def charger_json(self):
         try:
-            with open("appareils.json", "r") as f:
+            # Chemin vers le fichier JSON dans app/data
+            json_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "appareils.json")
+            
+            with open(json_path, "r") as f:
                 data = json.load(f)
-                for appareil in data:
-                    type_ = appareil["type"]
-                    if type_ == "frigo":
-                        self.appareils["frigo"].append(Frigo(
-                            appareil["identifiant"],
-                            appareil["marque"],
-                            appareil["reference"],
-                            appareil["numero_serie"],
-                            appareil["date_arrivee"],
-                            appareil["statut"],
-                            appareil["specifique"]
-                        ))
-                    elif type_ == "four":
-                        self.appareils["four"].append(Four(
-                            appareil["identifiant"],
-                            appareil["marque"],
-                            appareil["reference"],
-                            appareil["numero_serie"],
-                            appareil["date_arrivee"],
-                            appareil["statut"],
-                            appareil["specifique"]
-                        ))
-                    elif type_ == "lave_linge":
-                        self.appareils["lave_linge"].append(LaveLinge(
-                            appareil["identifiant"],
-                            appareil["marque"],
-                            appareil["reference"],
-                            appareil["numero_serie"],
-                            appareil["date_arrivee"],
-                            appareil["statut"],
-                            appareil["specifique"]
-                        ))
-                    elif type_ == "lave_linge_sechant":
-                        self.appareils["lave_linge_sechant"].append(LaveLingeSechant(
-                            appareil["identifiant"],
-                            appareil["marque"],
-                            appareil["reference"],
-                            appareil["numero_serie"],
-                            appareil["date_arrivee"],
-                            appareil["statut"],
-                            appareil["specifique"],
-                            appareil["capacite_sechage"]
-                        ))
-                    elif type_ == "lave_vaisselle":
-                        self.appareils["lave_vaisselle"].append(LaveVaisselle(
-                            appareil["identifiant"],
-                            appareil["marque"],
-                            appareil["reference"],
-                            appareil["numero_serie"],
-                            appareil["date_arrivee"],
-                            appareil["statut"],
-                            appareil["specifique"]
-                        ))
+                for type_, liste in data.items():
+                    for appareil in liste:
+                        if type_ == "frigo":
+                            self.appareils["frigo"].append(Frigo(
+                                appareil["identifiant"],
+                                appareil["marque"],
+                                appareil["reference"],
+                                appareil["numero_serie"],
+                                appareil["date_arrivee"],
+                                appareil["statut"],
+                                appareil["specifique"]
+                            ))
+                        elif type_ == "four":
+                            self.appareils["four"].append(Four(
+                                appareil["identifiant"],
+                                appareil["marque"],
+                                appareil["reference"],
+                                appareil["numero_serie"],
+                                appareil["date_arrivee"],
+                                appareil["statut"],
+                                appareil["specifique"]
+                            ))
+                        elif type_ == "lave_linge":
+                            self.appareils["lave_linge"].append(LaveLinge(
+                                appareil["identifiant"],
+                                appareil["marque"],
+                                appareil["reference"],
+                                appareil["numero_serie"],
+                                appareil["date_arrivee"],
+                                appareil["statut"],
+                                appareil["specifique"]
+                            ))
+                        elif type_ == "lave_linge_sechant":
+                            self.appareils["lave_linge_sechant"].append(LaveLingeSechant(
+                                appareil["identifiant"],
+                                appareil["marque"],
+                                appareil["reference"],
+                                appareil["numero_serie"],
+                                appareil["date_arrivee"],
+                                appareil["statut"],
+                                appareil["specifique"],
+                                appareil["capacite_sechage"]
+                            ))
+                        elif type_ == "lave_vaisselle":
+                            self.appareils["lave_vaisselle"].append(LaveVaisselle(
+                                appareil["identifiant"],
+                                appareil["marque"],
+                                appareil["reference"],
+                                appareil["numero_serie"],
+                                appareil["date_arrivee"],
+                                appareil["statut"],
+                                appareil["specifique"]
+                            ))
         except Exception as e:
             print(f"Erreur lors du chargement du fichier JSON: {str(e)}")
 
