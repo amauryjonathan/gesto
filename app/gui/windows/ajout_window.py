@@ -7,11 +7,26 @@ from app.models.lave_vaisselle import LaveVaisselle
 from app.models.lave_linge_sechant import LaveLingeSechant
 
 class AjoutWindow(tk.Toplevel):
-    def __init__(self, parent, callback_ajout):
+    def __init__(self, parent, callback):
         super().__init__(parent)
         self.title("Ajouter un appareil")
-        self.geometry("400x300")
-        self.callback_ajout = callback_ajout
+        self.geometry("400x500")
+        self.callback = callback
+        
+        # Liste des marques disponibles
+        self.marques = [
+            "Samsung", "LG", "Bosch", "Whirlpool", "Electrolux",
+            "Beko", "Haier", "Siemens", "Candy", "Indesit"
+        ]
+        
+        # Liste des types d'appareils
+        self.types = [
+            "frigo",
+            "four",
+            "lave_linge",
+            "lave_vaisselle",
+            "lave_linge_sechant"
+        ]
         
         # Rendre la fenêtre modale
         self.transient(parent)
@@ -19,104 +34,140 @@ class AjoutWindow(tk.Toplevel):
         
         self.create_widgets()
         
-        # Centrer la fenêtre
-        self.update_idletasks()
-        width = self.winfo_width()
-        height = self.winfo_height()
-        x = (self.winfo_screenwidth() // 2) - (width // 2)
-        y = (self.winfo_screenheight() // 2) - (height // 2)
-        self.geometry(f'{width}x{height}+{x}+{y}')
-        
     def create_widgets(self):
         # Frame principal
-        frame = ttk.Frame(self, padding="10")
-        frame.pack(fill="both", expand=True)
-        
-        # Variables
-        self.type_var = tk.StringVar(value="frigo")
-        self.marque_var = tk.StringVar()
-        self.ref_var = tk.StringVar()
-        self.spec_var = tk.StringVar()
-        self.spec2_var = tk.StringVar()
+        main_frame = ttk.Frame(self, padding="10")
+        main_frame.pack(fill="both", expand=True)
         
         # Type d'appareil
-        ttk.Label(frame, text="Type :").grid(row=0, column=0, sticky="w", pady=5)
-        types = ["frigo", "four", "lave_linge", "lave_linge_sechant", "lave_vaisselle"]
-        ttk.Combobox(frame, textvariable=self.type_var, values=types, width=15).grid(row=0, column=1, sticky="w", pady=5)
+        ttk.Label(main_frame, text="Type d'appareil:").pack(fill="x", pady=5)
+        self.type_var = tk.StringVar()
+        self.type_combo = ttk.Combobox(main_frame, textvariable=self.type_var, values=self.types, state="readonly")
+        self.type_combo.pack(fill="x", pady=5)
+        self.type_combo.bind("<<ComboboxSelected>>", self.on_type_change)
         
         # Marque
-        ttk.Label(frame, text="Marque :").grid(row=1, column=0, sticky="w", pady=5)
-        ttk.Entry(frame, textvariable=self.marque_var, width=20).grid(row=1, column=1, sticky="w", pady=5)
+        ttk.Label(main_frame, text="Marque:").pack(fill="x", pady=5)
+        self.marque_var = tk.StringVar()
+        self.marque_combo = ttk.Combobox(main_frame, textvariable=self.marque_var, values=self.marques, state="readonly")
+        self.marque_combo.pack(fill="x", pady=5)
         
         # Référence
-        ttk.Label(frame, text="Référence :").grid(row=2, column=0, sticky="w", pady=5)
-        ttk.Entry(frame, textvariable=self.ref_var, width=20).grid(row=2, column=1, sticky="w", pady=5)
+        ttk.Label(main_frame, text="Référence:").pack(fill="x", pady=5)
+        self.reference_var = tk.StringVar()
+        self.reference_entry = ttk.Entry(main_frame, textvariable=self.reference_var)
+        self.reference_entry.pack(fill="x", pady=5)
         
-        # Spécifique
-        ttk.Label(frame, text="Spécifique :").grid(row=3, column=0, sticky="w", pady=5)
-        ttk.Entry(frame, textvariable=self.spec_var, width=20).grid(row=3, column=1, sticky="w", pady=5)
+        # Numéro de série
+        ttk.Label(main_frame, text="Numéro de série:").pack(fill="x", pady=5)
+        self.numero_serie_var = tk.StringVar()
+        self.numero_serie_entry = ttk.Entry(main_frame, textvariable=self.numero_serie_var)
+        self.numero_serie_entry.pack(fill="x", pady=5)
+        
+        # Date d'arrivée
+        ttk.Label(main_frame, text="Date d'arrivée:").pack(fill="x", pady=5)
+        self.date_arrivee_var = tk.StringVar()
+        self.date_arrivee_entry = ttk.Entry(main_frame, textvariable=self.date_arrivee_var)
+        self.date_arrivee_entry.pack(fill="x", pady=5)
+        
+        # Statut
+        ttk.Label(main_frame, text="Statut:").pack(fill="x", pady=5)
+        self.statut_var = tk.StringVar(value="en stock")
+        self.statut_combo = ttk.Combobox(main_frame, textvariable=self.statut_var, 
+                                       values=["en stock", "en réparation", "réparé", "livré"], 
+                                       state="readonly")
+        self.statut_combo.pack(fill="x", pady=5)
+        
+        # Caractéristique spécifique
+        ttk.Label(main_frame, text="Caractéristique spécifique:").pack(fill="x", pady=5)
+        self.specifique_var = tk.StringVar()
+        self.specifique_entry = ttk.Entry(main_frame, textvariable=self.specifique_var)
+        self.specifique_entry.pack(fill="x", pady=5)
         
         # Capacité de séchage (initialement caché)
-        self.spec2_label = ttk.Label(frame, text="Cap. séchage :")
-        self.spec2_entry = ttk.Entry(frame, textvariable=self.spec2_var, width=20)
+        self.capacite_sechage_frame = ttk.Frame(main_frame)
+        ttk.Label(self.capacite_sechage_frame, text="Cap. séchage (kg):").pack(side="left")
+        self.capacite_sechage_var = tk.StringVar()
+        self.capacite_sechage_entry = ttk.Entry(self.capacite_sechage_frame, textvariable=self.capacite_sechage_var, width=10)
+        self.capacite_sechage_entry.pack(side="left", padx=5)
         
         # Boutons
-        frame_boutons = ttk.Frame(frame)
-        frame_boutons.grid(row=5, column=0, columnspan=2, pady=20)
+        button_frame = ttk.Frame(main_frame)
+        button_frame.pack(fill="x", pady=20)
         
-        ttk.Button(frame_boutons, text="Ajouter", command=self.ajouter_appareil).pack(side="left", padx=5)
-        ttk.Button(frame_boutons, text="Annuler", command=self.destroy).pack(side="left", padx=5)
+        ttk.Button(button_frame, text="Ajouter", command=self.ajouter_appareil).pack(side="left", padx=5)
+        ttk.Button(button_frame, text="Annuler", command=self.destroy).pack(side="right", padx=5)
         
-        # Bind event pour afficher/masquer le champ de capacité de séchage
-        self.type_var.trace_add("write", self.on_type_change)
+    def on_type_change(self, event=None):
+        """Gère le changement de type d'appareil"""
+        type_app = self.type_var.get()
         
-    def on_type_change(self, *args):
-        """Affiche ou masque le champ de capacité de séchage selon le type d'appareil"""
-        if self.type_var.get() == "lave_linge_sechant":
-            self.spec2_label.grid(row=4, column=0, sticky="w", pady=5)
-            self.spec2_entry.grid(row=4, column=1, sticky="w", pady=5)
+        # Afficher/masquer le champ de capacité de séchage
+        if type_app == "lave_linge_sechant":
+            self.capacite_sechage_frame.pack(fill="x", pady=5)
         else:
-            self.spec2_label.grid_remove()
-            self.spec2_entry.grid_remove()
+            self.capacite_sechage_frame.pack_forget()
             
-    def ajouter_appareil(self):
-        """Crée et ajoute un nouvel appareil"""
-        type_ = self.type_var.get()
-        marque = self.marque_var.get()
-        ref = self.ref_var.get()
-        spec = self.spec_var.get()
-        spec2 = self.spec2_var.get()
+        # Mettre à jour le label de la caractéristique spécifique
+        if type_app == "frigo":
+            ttk.Label(self.specifique_entry.master, text="Température (°C):").pack(fill="x", pady=5)
+        elif type_app in ["lave_linge", "lave_vaisselle"]:
+            ttk.Label(self.specifique_entry.master, text="Capacité (kg):").pack(fill="x", pady=5)
+        elif type_app == "four":
+            ttk.Label(self.specifique_entry.master, text="Volume (L):").pack(fill="x", pady=5)
+            
+    def verifier_appareil_existant(self, type_app, marque, reference):
+        """Vérifie si l'appareil existe déjà"""
+        appareil_id = f"{type_app}_{marque}_{reference}"
+        return appareil_id in self.master.appareils_dict
         
-        if not marque or not ref:
-            messagebox.showerror("Erreur", "Marque et référence obligatoires")
+    def ajouter_appareil(self):
+        """Ajoute un nouvel appareil"""
+        # Récupération des valeurs
+        type_app = self.type_var.get()
+        marque = self.marque_var.get()
+        reference = self.reference_var.get()
+        numero_serie = self.numero_serie_var.get()
+        date_arrivee = self.date_arrivee_var.get()
+        statut = self.statut_var.get()
+        
+        # Vérification des champs obligatoires
+        if not all([type_app, marque, reference, numero_serie, date_arrivee]):
+            messagebox.showerror("Erreur", "Tous les champs sont obligatoires!")
+            return
+            
+        # Vérification si l'appareil existe déjà
+        if self.verifier_appareil_existant(type_app, marque, reference):
+            messagebox.showerror("Erreur", "Cet appareil existe déjà dans la base!")
             return
             
         try:
-            if type_ == "frigo":
-                temp = float(spec) if spec else 4.0
-                appareil = Frigo(marque, ref, temp)
-            elif type_ == "four":
-                temp = float(spec) if spec else 0.0
-                appareil = Four(marque, ref, temp)
-            elif type_ == "lave_linge":
-                cap = float(spec) if spec else 7.0
-                appareil = LaveLinge(marque, ref, cap)
-            elif type_ == "lave_linge_sechant":
-                cap = float(spec) if spec else 8.0
-                cap_sechage = float(spec2) if spec2 else 5.0
-                appareil = LaveLingeSechant(marque, ref, cap, cap_sechage)
-            elif type_ == "lave_vaisselle":
-                cap = int(spec) if spec else 12
-                appareil = LaveVaisselle(marque, ref, cap)
-            else:
-                messagebox.showerror("Erreur", "Type inconnu")
-                return
-                
-            # Appel du callback pour informer la fenêtre principale
-            self.callback_ajout(appareil)
+            # Création de l'appareil selon son type
+            if type_app == "frigo":
+                temperature = float(self.specifique_var.get())
+                appareil = Frigo(f"F{len(self.master.appareils_dict)+1:03d}", marque, reference, 
+                               numero_serie, date_arrivee, statut, temperature)
+            elif type_app == "four":
+                volume = float(self.specifique_var.get())
+                appareil = Four(f"O{len(self.master.appareils_dict)+1:03d}", marque, reference, 
+                              numero_serie, date_arrivee, statut, volume)
+            elif type_app == "lave_linge":
+                capacite = float(self.specifique_var.get())
+                appareil = LaveLinge(f"L{len(self.master.appareils_dict)+1:03d}", marque, reference, 
+                                   numero_serie, date_arrivee, statut, capacite)
+            elif type_app == "lave_vaisselle":
+                capacite = float(self.specifique_var.get())
+                appareil = LaveVaisselle(f"LV{len(self.master.appareils_dict)+1:03d}", marque, reference, 
+                                       numero_serie, date_arrivee, statut, capacite)
+            elif type_app == "lave_linge_sechant":
+                capacite = float(self.specifique_var.get())
+                capacite_sechage = float(self.capacite_sechage_var.get())
+                appareil = LaveLingeSechant(f"LS{len(self.master.appareils_dict)+1:03d}", marque, reference, 
+                                          numero_serie, date_arrivee, statut, capacite, capacite_sechage)
             
-            # Fermer la fenêtre
+            # Appel du callback avec le nouvel appareil
+            self.callback(appareil)
             self.destroy()
             
-        except ValueError as e:
-            messagebox.showerror("Erreur", str(e)) 
+        except ValueError:
+            messagebox.showerror("Erreur", "Les valeurs numériques doivent être des nombres valides!") 

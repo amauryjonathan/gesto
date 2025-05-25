@@ -8,6 +8,21 @@ class RechercheWindow(tk.Toplevel):
         self.geometry("400x300")
         self.gestionnaire = gestionnaire
         
+        # Liste des marques disponibles
+        self.marques = [
+            "Samsung", "LG", "Bosch", "Whirlpool", "Electrolux",
+            "Beko", "Haier", "Siemens", "Candy", "Indesit"
+        ]
+        
+        # Liste des types d'appareils
+        self.types = [
+            "frigo",
+            "four",
+            "lave_linge",
+            "lave_vaisselle",
+            "lave_linge_sechant"
+        ]
+        
         # Rendre la fenêtre modale
         self.transient(parent)
         self.grab_set()
@@ -24,50 +39,75 @@ class RechercheWindow(tk.Toplevel):
         
     def create_widgets(self):
         # Frame principal
-        frame = ttk.Frame(self, padding="10")
-        frame.pack(fill="both", expand=True)
-        
-        # Variables
-        self.type_var = tk.StringVar(value="tous")
-        self.marque_var = tk.StringVar()
+        main_frame = ttk.Frame(self, padding="10")
+        main_frame.pack(fill="both", expand=True)
         
         # Type d'appareil
-        ttk.Label(frame, text="Type :").grid(row=0, column=0, sticky="w", pady=5)
-        types = ["tous", "frigo", "four", "lave_linge", "lave_linge_sechant", "lave_vaisselle"]
-        ttk.Combobox(frame, textvariable=self.type_var, values=types, width=15).grid(row=0, column=1, sticky="w", pady=5)
+        ttk.Label(main_frame, text="Type d'appareil:").pack(fill="x", pady=5)
+        self.type_var = tk.StringVar()
+        self.type_combo = ttk.Combobox(main_frame, textvariable=self.type_var, values=self.types, state="readonly")
+        self.type_combo.pack(fill="x", pady=5)
         
         # Marque
-        ttk.Label(frame, text="Marque :").grid(row=1, column=0, sticky="w", pady=5)
-        ttk.Entry(frame, textvariable=self.marque_var, width=20).grid(row=1, column=1, sticky="w", pady=5)
+        ttk.Label(main_frame, text="Marque:").pack(fill="x", pady=5)
+        self.marque_var = tk.StringVar()
+        self.marque_combo = ttk.Combobox(main_frame, textvariable=self.marque_var, values=self.marques, state="readonly")
+        self.marque_combo.pack(fill="x", pady=5)
+        
+        # Référence
+        ttk.Label(main_frame, text="Référence:").pack(fill="x", pady=5)
+        self.reference_var = tk.StringVar()
+        self.reference_entry = ttk.Entry(main_frame, textvariable=self.reference_var)
+        self.reference_entry.pack(fill="x", pady=5)
         
         # Boutons
-        frame_boutons = ttk.Frame(frame)
-        frame_boutons.grid(row=2, column=0, columnspan=2, pady=20)
+        button_frame = ttk.Frame(main_frame)
+        button_frame.pack(fill="x", pady=20)
         
-        ttk.Button(frame_boutons, text="Rechercher", command=self.rechercher).pack(side="left", padx=5)
-        ttk.Button(frame_boutons, text="Fermer", command=self.destroy).pack(side="left", padx=5)
+        ttk.Button(button_frame, text="Rechercher", command=self.rechercher).pack(side="left", padx=5)
+        ttk.Button(button_frame, text="Fermer", command=self.destroy).pack(side="right", padx=5)
         
     def rechercher(self):
-        """Effectue la recherche selon les critères"""
-        type_ = self.type_var.get()
-        marque = self.marque_var.get().lower()
+        """Effectue la recherche d'appareils"""
+        type_app = self.type_var.get()
+        marque = self.marque_var.get()
+        reference = self.reference_var.get()
         
         # Récupérer tous les appareils
         appareils = self.gestionnaire.lister_appareils()
         
-        # Filtrer selon les critères
+        # Filtrer les résultats
         resultats = []
-        for type_app, liste in appareils.items():
-            if type_ == "tous" or type_app == type_:
-                for appareil in liste:
-                    if not marque or marque in appareil.marque.lower():
-                        resultats.append((type_app, appareil))
+        for type_, liste in appareils.items():
+            if type_app and type_ != type_app:
+                continue
+                
+            for appareil in liste:
+                if marque and appareil.marque != marque:
+                    continue
+                if reference and appareil.reference != reference:
+                    continue
+                    
+                resultats.append(appareil)
         
         # Afficher les résultats
         if resultats:
-            message = "Résultats de la recherche :\n\n"
-            for type_app, appareil in resultats:
-                message += f"{type_app} - {appareil.marque} {appareil.reference}\n"
+            message = "Appareils trouvés:\n\n"
+            for appareil in resultats:
+                message += f"Type: {appareil.get_type()}\n"
+                message += f"Marque: {appareil.marque}\n"
+                message += f"Référence: {appareil.reference}\n"
+                message += f"Numéro de série: {appareil.numero_serie}\n"
+                message += f"Date d'arrivée: {appareil.date_arrivee}\n"
+                message += f"Statut: {appareil.statut}\n"
+                if hasattr(appareil, 'temperature'):
+                    message += f"Température: {appareil.temperature}°C\n"
+                elif hasattr(appareil, 'capacite'):
+                    message += f"Capacité: {appareil.capacite}kg\n"
+                elif hasattr(appareil, 'capacite_sechage'):
+                    message += f"Capacité séchage: {appareil.capacite_sechage}kg\n"
+                message += "\n"
+            
             messagebox.showinfo("Résultats", message)
         else:
-            messagebox.showinfo("Résultats", "Aucun appareil trouvé") 
+            messagebox.showinfo("Résultats", "Aucun appareil trouvé.") 

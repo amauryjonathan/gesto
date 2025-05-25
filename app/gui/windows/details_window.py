@@ -2,11 +2,12 @@ import tkinter as tk
 from tkinter import ttk
 
 class DetailsWindow(tk.Toplevel):
-    def __init__(self, parent, appareil):
+    def __init__(self, parent, appareil, metadonnees=None):
         super().__init__(parent)
-        self.title(f"Détails - {appareil.marque} {appareil.reference}")
-        self.geometry("400x300")
+        self.title("Détails de l'appareil")
+        self.geometry("400x600")
         self.appareil = appareil
+        self.metadonnees = metadonnees or {}
         
         # Rendre la fenêtre modale
         self.transient(parent)
@@ -16,34 +17,83 @@ class DetailsWindow(tk.Toplevel):
         
     def create_widgets(self):
         # Frame principal
-        frame = ttk.Frame(self, padding="10")
-        frame.pack(fill="both", expand=True)
+        main_frame = ttk.Frame(self, padding="10")
+        main_frame.pack(fill="both", expand=True)
         
-        # Informations générales
-        ttk.Label(frame, text="Informations générales", font=("", 12, "bold")).pack(pady=(0, 10))
+        # Informations de base
+        base_frame = ttk.LabelFrame(main_frame, text="Informations de base", padding="5")
+        base_frame.pack(fill="x", pady=5)
         
-        # Type d'appareil
-        ttk.Label(frame, text=f"Type: {self.appareil.get_type()}").pack(anchor="w", pady=2)
+        # Type
+        ttk.Label(base_frame, text="Type:").grid(row=0, column=0, sticky="w", pady=2)
+        ttk.Label(base_frame, text=self.appareil.get_type()).grid(row=0, column=1, sticky="w", pady=2)
         
         # Marque
-        ttk.Label(frame, text=f"Marque: {self.appareil.marque}").pack(anchor="w", pady=2)
+        ttk.Label(base_frame, text="Marque:").grid(row=1, column=0, sticky="w", pady=2)
+        ttk.Label(base_frame, text=self.appareil.marque).grid(row=1, column=1, sticky="w", pady=2)
         
         # Référence
-        ttk.Label(frame, text=f"Référence: {self.appareil.reference}").pack(anchor="w", pady=2)
+        ttk.Label(base_frame, text="Référence:").grid(row=2, column=0, sticky="w", pady=2)
+        ttk.Label(base_frame, text=self.appareil.reference).grid(row=2, column=1, sticky="w", pady=2)
+        
+        # Numéro de série
+        ttk.Label(base_frame, text="Numéro de série:").grid(row=3, column=0, sticky="w", pady=2)
+        ttk.Label(base_frame, text=self.appareil.numero_serie).grid(row=3, column=1, sticky="w", pady=2)
+        
+        # Date d'arrivée
+        ttk.Label(base_frame, text="Date d'arrivée:").grid(row=4, column=0, sticky="w", pady=2)
+        ttk.Label(base_frame, text=self.appareil.date_arrivee).grid(row=4, column=1, sticky="w", pady=2)
+        
+        # Statut
+        ttk.Label(base_frame, text="Statut:").grid(row=5, column=0, sticky="w", pady=2)
+        ttk.Label(base_frame, text=self.appareil.statut).grid(row=5, column=1, sticky="w", pady=2)
         
         # Caractéristiques spécifiques
-        ttk.Label(frame, text="Caractéristiques spécifiques", font=("", 12, "bold")).pack(pady=(20, 10))
+        spec_frame = ttk.LabelFrame(main_frame, text="Caractéristiques spécifiques", padding="5")
+        spec_frame.pack(fill="x", pady=5)
         
-        # Afficher les caractéristiques selon le type d'appareil
         if hasattr(self.appareil, 'temperature'):
-            ttk.Label(frame, text=f"Température: {self.appareil.temperature}°C").pack(anchor="w", pady=2)
-        if hasattr(self.appareil, 'capacite'):
-            ttk.Label(frame, text=f"Capacité: {self.appareil.capacite}kg").pack(anchor="w", pady=2)
-        if hasattr(self.appareil, 'capacite_sechage'):
-            ttk.Label(frame, text=f"Capacité de séchage: {self.appareil.capacite_sechage}kg").pack(anchor="w", pady=2)
+            ttk.Label(spec_frame, text="Température:").grid(row=0, column=0, sticky="w", pady=2)
+            ttk.Label(spec_frame, text=f"{self.appareil.temperature}°C").grid(row=0, column=1, sticky="w", pady=2)
+        elif hasattr(self.appareil, 'capacite'):
+            ttk.Label(spec_frame, text="Capacité:").grid(row=0, column=0, sticky="w", pady=2)
+            ttk.Label(spec_frame, text=f"{self.appareil.capacite}kg").grid(row=0, column=1, sticky="w", pady=2)
+        elif hasattr(self.appareil, 'capacite_sechage'):
+            ttk.Label(spec_frame, text="Capacité de séchage:").grid(row=0, column=0, sticky="w", pady=2)
+            ttk.Label(spec_frame, text=f"{self.appareil.capacite_sechage}kg").grid(row=0, column=1, sticky="w", pady=2)
             
-        # Bouton de fermeture
-        ttk.Button(frame, text="Fermer", command=self.destroy).pack(pady=(20, 0))
+        # Informations de réparation
+        if self.metadonnees:
+            rep_frame = ttk.LabelFrame(main_frame, text="Informations de réparation", padding="5")
+            rep_frame.pack(fill="x", pady=5)
+            
+            # Date de prise en charge
+            if self.metadonnees.get('date_prise_en_charge'):
+                ttk.Label(rep_frame, text="Date de prise en charge:").grid(row=0, column=0, sticky="w", pady=2)
+                ttk.Label(rep_frame, text=self.metadonnees['date_prise_en_charge']).grid(row=0, column=1, sticky="w", pady=2)
+            
+            # Panne détectée
+            if self.metadonnees.get('panne_detectee'):
+                ttk.Label(rep_frame, text="Panne détectée:").grid(row=1, column=0, sticky="w", pady=2)
+                ttk.Label(rep_frame, text=self.metadonnees['panne_detectee']).grid(row=1, column=1, sticky="w", pady=2)
+            
+            # Statut de réparation
+            if self.metadonnees.get('statut_reparation'):
+                ttk.Label(rep_frame, text="Statut de réparation:").grid(row=2, column=0, sticky="w", pady=2)
+                ttk.Label(rep_frame, text=self.metadonnees['statut_reparation']).grid(row=2, column=1, sticky="w", pady=2)
+            
+            # Technicien
+            if self.metadonnees.get('technicien'):
+                ttk.Label(rep_frame, text="Technicien:").grid(row=3, column=0, sticky="w", pady=2)
+                ttk.Label(rep_frame, text=self.metadonnees['technicien']).grid(row=3, column=1, sticky="w", pady=2)
+            
+            # Notes
+            if self.metadonnees.get('notes'):
+                ttk.Label(rep_frame, text="Notes:").grid(row=4, column=0, sticky="w", pady=2)
+                ttk.Label(rep_frame, text=self.metadonnees['notes']).grid(row=4, column=1, sticky="w", pady=2)
+        
+        # Bouton Fermer
+        ttk.Button(main_frame, text="Fermer", command=self.destroy).pack(pady=20)
         
         # Centrer la fenêtre
         self.update_idletasks()
