@@ -2,6 +2,7 @@ import json
 import os
 import random
 from datetime import datetime, timedelta
+from itertools import product
 
 def generate_appareils():
     # Liste des marques disponibles
@@ -57,6 +58,14 @@ def generate_appareils():
         "lave_linge_sechant": []
     }
     
+    # Générer toutes les combinaisons possibles de racks
+    cellules = [chr(i) for i in range(65, 83)]  # A à R
+    emplacements = list(range(1, 10))  # 1 à 9
+    positions = ["A", "B"]
+    all_racks = list(product(cellules, emplacements, positions))
+    random.shuffle(all_racks)
+    rack_index = 0
+    
     # Générer 200 appareils (40 de chaque type)
     for type_app, specs in types_appareils.items():
         for i in range(40):
@@ -88,6 +97,14 @@ def generate_appareils():
             elif type_app == "lave_linge_sechant":
                 appareil["specifique"] = round(random.uniform(*specs["cap_range"]), 1)
                 appareil["capacite_sechage"] = round(random.uniform(*specs["sechage_range"]), 1)
+            
+            # Attribuer un rack unique
+            if rack_index < len(all_racks):
+                cellule, emplacement, position = all_racks[rack_index]
+                appareil["cellule"] = cellule
+                appareil["emplacement"] = emplacement
+                appareil["position"] = position
+                rack_index += 1
             
             appareils[type_app].append(appareil)
     

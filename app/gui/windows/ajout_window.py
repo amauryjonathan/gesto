@@ -161,8 +161,6 @@ class AjoutWindow(tk.Toplevel):
         numero_serie = self.numero_serie_var.get()
         date_arrivee = self.date_arrivee_var.get()
         statut = self.statut_var.get()
-        
-        # Récupération des valeurs de localisation
         cellule = self.cellule_var.get()
         emplacement = self.emplacement_var.get()
         position = self.position_var.get()
@@ -181,24 +179,24 @@ class AjoutWindow(tk.Toplevel):
             # Création de l'appareil selon son type
             if type_app == "frigo":
                 temperature = float(self.specifique_var.get())
-                appareil = Frigo(f"F{len(self.master.appareils_dict)+1:03d}", marque, reference, 
+                appareil = Frigo(f"F{len(self.master.gestionnaire.appareils['frigo'])+1:03d}", marque, reference, 
                                numero_serie, date_arrivee, statut, temperature)
             elif type_app == "four":
                 volume = float(self.specifique_var.get())
-                appareil = Four(f"O{len(self.master.appareils_dict)+1:03d}", marque, reference, 
+                appareil = Four(f"O{len(self.master.gestionnaire.appareils['four'])+1:03d}", marque, reference, 
                               numero_serie, date_arrivee, statut, volume)
             elif type_app == "lave_linge":
                 capacite = float(self.specifique_var.get())
-                appareil = LaveLinge(f"L{len(self.master.appareils_dict)+1:03d}", marque, reference, 
+                appareil = LaveLinge(f"L{len(self.master.gestionnaire.appareils['lave_linge'])+1:03d}", marque, reference, 
                                    numero_serie, date_arrivee, statut, capacite)
             elif type_app == "lave_vaisselle":
                 capacite = float(self.specifique_var.get())
-                appareil = LaveVaisselle(f"LV{len(self.master.appareils_dict)+1:03d}", marque, reference, 
+                appareil = LaveVaisselle(f"LV{len(self.master.gestionnaire.appareils['lave_vaisselle'])+1:03d}", marque, reference, 
                                        numero_serie, date_arrivee, statut, capacite)
             elif type_app == "lave_linge_sechant":
                 capacite = float(self.specifique_var.get())
                 capacite_sechage = float(self.capacite_sechage_var.get())
-                appareil = LaveLingeSechant(f"LS{len(self.master.appareils_dict)+1:03d}", marque, reference, 
+                appareil = LaveLingeSechant(f"LS{len(self.master.gestionnaire.appareils['lave_linge_sechant'])+1:03d}", marque, reference, 
                                           numero_serie, date_arrivee, statut, capacite, capacite_sechage)
             
             # Définir la localisation si elle est fournie
@@ -209,8 +207,13 @@ class AjoutWindow(tk.Toplevel):
                     messagebox.showerror("Erreur", str(e))
                     return
             
-            # Appel du callback avec le nouvel appareil
-            self.callback(appareil)
+            # Appel du gestionnaire pour ajouter l'appareil
+            try:
+                self.master.gestionnaire.ajouter_appareil(appareil)
+            except ValueError as e:
+                messagebox.showerror("Erreur", str(e))
+                return
+            self.master.refresh_liste()
             self.destroy()
             
         except ValueError:
