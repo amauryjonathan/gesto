@@ -10,7 +10,7 @@ class AjoutWindow(tk.Toplevel):
     def __init__(self, parent, callback):
         super().__init__(parent)
         self.title("Ajouter un appareil")
-        self.geometry("400x500")
+        self.geometry("400x600")
         self.callback = callback
         
         # Liste des marques disponibles
@@ -27,6 +27,12 @@ class AjoutWindow(tk.Toplevel):
             "lave_vaisselle",
             "lave_linge_sechant"
         ]
+        
+        # Liste des cellules disponibles (A à R)
+        self.cellules = [chr(i) for i in range(65, 83)]  # A à R
+        
+        # Liste des positions disponibles
+        self.positions = ["A", "B"]
         
         # Rendre la fenêtre modale
         self.transient(parent)
@@ -91,6 +97,31 @@ class AjoutWindow(tk.Toplevel):
         self.capacite_sechage_entry = ttk.Entry(self.capacite_sechage_frame, textvariable=self.capacite_sechage_var, width=10)
         self.capacite_sechage_entry.pack(side="left", padx=5)
         
+        # Frame pour la localisation
+        localisation_frame = ttk.LabelFrame(main_frame, text="Localisation", padding="5")
+        localisation_frame.pack(fill="x", pady=10)
+        
+        # Cellule
+        ttk.Label(localisation_frame, text="Cellule:").grid(row=0, column=0, sticky="w", padx=5, pady=5)
+        self.cellule_var = tk.StringVar()
+        self.cellule_combo = ttk.Combobox(localisation_frame, textvariable=self.cellule_var, 
+                                        values=self.cellules, state="readonly", width=5)
+        self.cellule_combo.grid(row=0, column=1, sticky="w", padx=5, pady=5)
+        
+        # Emplacement
+        ttk.Label(localisation_frame, text="Emplacement:").grid(row=0, column=2, sticky="w", padx=5, pady=5)
+        self.emplacement_var = tk.StringVar()
+        self.emplacement_spinbox = ttk.Spinbox(localisation_frame, from_=1, to=9, 
+                                             textvariable=self.emplacement_var, width=5)
+        self.emplacement_spinbox.grid(row=0, column=3, sticky="w", padx=5, pady=5)
+        
+        # Position
+        ttk.Label(localisation_frame, text="Position:").grid(row=0, column=4, sticky="w", padx=5, pady=5)
+        self.position_var = tk.StringVar()
+        self.position_combo = ttk.Combobox(localisation_frame, textvariable=self.position_var, 
+                                         values=self.positions, state="readonly", width=5)
+        self.position_combo.grid(row=0, column=5, sticky="w", padx=5, pady=5)
+        
         # Boutons
         button_frame = ttk.Frame(main_frame)
         button_frame.pack(fill="x", pady=20)
@@ -131,6 +162,11 @@ class AjoutWindow(tk.Toplevel):
         date_arrivee = self.date_arrivee_var.get()
         statut = self.statut_var.get()
         
+        # Récupération des valeurs de localisation
+        cellule = self.cellule_var.get()
+        emplacement = self.emplacement_var.get()
+        position = self.position_var.get()
+        
         # Vérification des champs obligatoires
         if not all([type_app, marque, reference, numero_serie, date_arrivee]):
             messagebox.showerror("Erreur", "Tous les champs sont obligatoires!")
@@ -164,6 +200,14 @@ class AjoutWindow(tk.Toplevel):
                 capacite_sechage = float(self.capacite_sechage_var.get())
                 appareil = LaveLingeSechant(f"LS{len(self.master.appareils_dict)+1:03d}", marque, reference, 
                                           numero_serie, date_arrivee, statut, capacite, capacite_sechage)
+            
+            # Définir la localisation si elle est fournie
+            if cellule and emplacement and position:
+                try:
+                    appareil.set_localisation(cellule, int(emplacement), position)
+                except ValueError as e:
+                    messagebox.showerror("Erreur", str(e))
+                    return
             
             # Appel du callback avec le nouvel appareil
             self.callback(appareil)

@@ -1,7 +1,1852 @@
 {
-    "frigo": [],
-    "four": [],
-    "lave_linge": [],
-    "lave_vaisselle": [],
-    "lave_linge_sechant": []
+    "frigo": [
+        {
+            "identifiant": "F001",
+            "marque": "Siemens",
+            "reference": "RT573",
+            "numero_serie": "SN23264",
+            "date_arrivee": "2025-04-30",
+            "statut": "En test",
+            "specifique": 3.2
+        },
+        {
+            "identifiant": "F002",
+            "marque": "Samsung",
+            "reference": "RT236",
+            "numero_serie": "SN62238",
+            "date_arrivee": "2025-05-23",
+            "statut": "En attente",
+            "specifique": 4.0
+        },
+        {
+            "identifiant": "F003",
+            "marque": "Samsung",
+            "reference": "RT843",
+            "numero_serie": "SN28098",
+            "date_arrivee": "2025-05-11",
+            "statut": "A Nettoyer",
+            "specifique": 4.1
+        },
+        {
+            "identifiant": "F004",
+            "marque": "Samsung",
+            "reference": "RT691",
+            "numero_serie": "SN22710",
+            "date_arrivee": "2025-05-15",
+            "statut": "Réparé",
+            "specifique": 4.7
+        },
+        {
+            "identifiant": "F005",
+            "marque": "Samsung",
+            "reference": "RT493",
+            "numero_serie": "SN80787",
+            "date_arrivee": "2025-05-11",
+            "statut": "Réparé",
+            "specifique": 5.6
+        },
+        {
+            "identifiant": "F006",
+            "marque": "Beko",
+            "reference": "RT506",
+            "numero_serie": "SN26191",
+            "date_arrivee": "2025-05-17",
+            "statut": "Réparé",
+            "specifique": 2.7
+        },
+        {
+            "identifiant": "F007",
+            "marque": "LG",
+            "reference": "RT985",
+            "numero_serie": "SN32055",
+            "date_arrivee": "2025-05-03",
+            "statut": "En réparation",
+            "specifique": 3.2
+        },
+        {
+            "identifiant": "F008",
+            "marque": "Electrolux",
+            "reference": "RT484",
+            "numero_serie": "SN32848",
+            "date_arrivee": "2025-05-09",
+            "statut": "En réparation",
+            "specifique": 7.6
+        },
+        {
+            "identifiant": "F009",
+            "marque": "LG",
+            "reference": "RT915",
+            "numero_serie": "SN43797",
+            "date_arrivee": "2025-05-09",
+            "statut": "En réparation",
+            "specifique": 4.9
+        },
+        {
+            "identifiant": "F010",
+            "marque": "LG",
+            "reference": "RT689",
+            "numero_serie": "SN84161",
+            "date_arrivee": "2025-05-14",
+            "statut": "Prêt à livrer",
+            "specifique": 7.7
+        },
+        {
+            "identifiant": "F011",
+            "marque": "Bosch",
+            "reference": "RT273",
+            "numero_serie": "SN42895",
+            "date_arrivee": "2025-05-21",
+            "statut": "En réparation",
+            "specifique": 5.9
+        },
+        {
+            "identifiant": "F012",
+            "marque": "Candy",
+            "reference": "RT791",
+            "numero_serie": "SN89573",
+            "date_arrivee": "2025-04-27",
+            "statut": "En réparation",
+            "specifique": 5.4
+        },
+        {
+            "identifiant": "F013",
+            "marque": "Siemens",
+            "reference": "RT907",
+            "numero_serie": "SN91314",
+            "date_arrivee": "2025-05-11",
+            "statut": "En test",
+            "specifique": 6.0
+        },
+        {
+            "identifiant": "F014",
+            "marque": "Haier",
+            "reference": "RT980",
+            "numero_serie": "SN61574",
+            "date_arrivee": "2025-04-29",
+            "statut": "En test",
+            "specifique": 7.1
+        },
+        {
+            "identifiant": "F015",
+            "marque": "Indesit",
+            "reference": "RT628",
+            "numero_serie": "SN62886",
+            "date_arrivee": "2025-05-26",
+            "statut": "En attente",
+            "specifique": 4.7
+        },
+        {
+            "identifiant": "F016",
+            "marque": "Indesit",
+            "reference": "RT776",
+            "numero_serie": "SN84423",
+            "date_arrivee": "2025-05-17",
+            "statut": "En test",
+            "specifique": 3.7
+        },
+        {
+            "identifiant": "F017",
+            "marque": "Candy",
+            "reference": "RT381",
+            "numero_serie": "SN11103",
+            "date_arrivee": "2025-05-22",
+            "statut": "En réparation",
+            "specifique": 2.2
+        },
+        {
+            "identifiant": "F018",
+            "marque": "Bosch",
+            "reference": "RT397",
+            "numero_serie": "SN61499",
+            "date_arrivee": "2025-05-15",
+            "statut": "En attente",
+            "specifique": 4.1
+        },
+        {
+            "identifiant": "F019",
+            "marque": "Candy",
+            "reference": "RT780",
+            "numero_serie": "SN43662",
+            "date_arrivee": "2025-05-16",
+            "statut": "En test",
+            "specifique": 2.7
+        },
+        {
+            "identifiant": "F020",
+            "marque": "Electrolux",
+            "reference": "RT644",
+            "numero_serie": "SN10506",
+            "date_arrivee": "2025-04-27",
+            "statut": "En réparation",
+            "specifique": 4.5
+        },
+        {
+            "identifiant": "F021",
+            "marque": "Haier",
+            "reference": "RT803",
+            "numero_serie": "SN72158",
+            "date_arrivee": "2025-05-04",
+            "statut": "En test",
+            "specifique": 5.7
+        },
+        {
+            "identifiant": "F022",
+            "marque": "Bosch",
+            "reference": "RT231",
+            "numero_serie": "SN66059",
+            "date_arrivee": "2025-05-19",
+            "statut": "Réparé",
+            "specifique": 3.1
+        },
+        {
+            "identifiant": "F023",
+            "marque": "Beko",
+            "reference": "RT159",
+            "numero_serie": "SN62007",
+            "date_arrivee": "2025-05-07",
+            "statut": "Prêt à livrer",
+            "specifique": 5.9
+        },
+        {
+            "identifiant": "F024",
+            "marque": "LG",
+            "reference": "RT507",
+            "numero_serie": "SN35560",
+            "date_arrivee": "2025-05-11",
+            "statut": "En test",
+            "specifique": 7.7
+        },
+        {
+            "identifiant": "F025",
+            "marque": "Indesit",
+            "reference": "RT251",
+            "numero_serie": "SN93955",
+            "date_arrivee": "2025-05-26",
+            "statut": "En réparation",
+            "specifique": 7.3
+        },
+        {
+            "identifiant": "F026",
+            "marque": "LG",
+            "reference": "RT971",
+            "numero_serie": "SN65260",
+            "date_arrivee": "2025-05-05",
+            "statut": "En attente",
+            "specifique": 4.8
+        },
+        {
+            "identifiant": "F027",
+            "marque": "Whirlpool",
+            "reference": "RT187",
+            "numero_serie": "SN84552",
+            "date_arrivee": "2025-05-08",
+            "statut": "Prêt à livrer",
+            "specifique": 5.0
+        },
+        {
+            "identifiant": "F028",
+            "marque": "Candy",
+            "reference": "RT730",
+            "numero_serie": "SN56603",
+            "date_arrivee": "2025-05-16",
+            "statut": "Prêt à livrer",
+            "specifique": 4.6
+        },
+        {
+            "identifiant": "F029",
+            "marque": "Electrolux",
+            "reference": "RT243",
+            "numero_serie": "SN62822",
+            "date_arrivee": "2025-05-02",
+            "statut": "En réparation",
+            "specifique": 6.8
+        },
+        {
+            "identifiant": "F030",
+            "marque": "Electrolux",
+            "reference": "RT706",
+            "numero_serie": "SN50217",
+            "date_arrivee": "2025-05-03",
+            "statut": "En réparation",
+            "specifique": 4.6
+        },
+        {
+            "identifiant": "F031",
+            "marque": "Electrolux",
+            "reference": "RT727",
+            "numero_serie": "SN23113",
+            "date_arrivee": "2025-05-04",
+            "statut": "En test",
+            "specifique": 6.7
+        },
+        {
+            "identifiant": "F032",
+            "marque": "Samsung",
+            "reference": "RT706",
+            "numero_serie": "SN29365",
+            "date_arrivee": "2025-05-07",
+            "statut": "Prêt à livrer",
+            "specifique": 2.4
+        },
+        {
+            "identifiant": "F033",
+            "marque": "Candy",
+            "reference": "RT742",
+            "numero_serie": "SN14283",
+            "date_arrivee": "2025-04-29",
+            "statut": "En réparation",
+            "specifique": 3.3
+        },
+        {
+            "identifiant": "F034",
+            "marque": "Beko",
+            "reference": "RT940",
+            "numero_serie": "SN85786",
+            "date_arrivee": "2025-05-11",
+            "statut": "Prêt à livrer",
+            "specifique": 5.0
+        },
+        {
+            "identifiant": "F035",
+            "marque": "Whirlpool",
+            "reference": "RT328",
+            "numero_serie": "SN92965",
+            "date_arrivee": "2025-05-01",
+            "statut": "Réparé",
+            "specifique": 2.9
+        },
+        {
+            "identifiant": "F036",
+            "marque": "LG",
+            "reference": "RT238",
+            "numero_serie": "SN25487",
+            "date_arrivee": "2025-05-06",
+            "statut": "En test",
+            "specifique": 6.7
+        },
+        {
+            "identifiant": "F037",
+            "marque": "Electrolux",
+            "reference": "RT877",
+            "numero_serie": "SN49191",
+            "date_arrivee": "2025-04-28",
+            "statut": "En réparation",
+            "specifique": 2.6
+        },
+        {
+            "identifiant": "F038",
+            "marque": "Haier",
+            "reference": "RT860",
+            "numero_serie": "SN68814",
+            "date_arrivee": "2025-05-07",
+            "statut": "En réparation",
+            "specifique": 6.2
+        },
+        {
+            "identifiant": "F039",
+            "marque": "Beko",
+            "reference": "RT650",
+            "numero_serie": "SN70484",
+            "date_arrivee": "2025-05-02",
+            "statut": "Prêt à livrer",
+            "specifique": 7.6
+        },
+        {
+            "identifiant": "F040",
+            "marque": "Candy",
+            "reference": "RT289",
+            "numero_serie": "SN84335",
+            "date_arrivee": "2025-05-12",
+            "statut": "En attente",
+            "specifique": 4.1
+        }
+    ],
+    "four": [
+        {
+            "identifiant": "O001",
+            "marque": "Whirlpool",
+            "reference": "OV480",
+            "numero_serie": "SN58588",
+            "date_arrivee": "2025-05-14",
+            "statut": "En attente",
+            "specifique": 170
+        },
+        {
+            "identifiant": "O002",
+            "marque": "LG",
+            "reference": "OV166",
+            "numero_serie": "SN46793",
+            "date_arrivee": "2025-05-03",
+            "statut": "Réparé",
+            "specifique": 122
+        },
+        {
+            "identifiant": "O003",
+            "marque": "Samsung",
+            "reference": "OV477",
+            "numero_serie": "SN69165",
+            "date_arrivee": "2025-05-01",
+            "statut": "En attente",
+            "specifique": 132
+        },
+        {
+            "identifiant": "O004",
+            "marque": "LG",
+            "reference": "OV118",
+            "numero_serie": "SN81537",
+            "date_arrivee": "2025-05-05",
+            "statut": "Prêt à livrer",
+            "specifique": 113
+        },
+        {
+            "identifiant": "O005",
+            "marque": "Electrolux",
+            "reference": "OV462",
+            "numero_serie": "SN55574",
+            "date_arrivee": "2025-04-28",
+            "statut": "En test",
+            "specifique": 156
+        },
+        {
+            "identifiant": "O006",
+            "marque": "LG",
+            "reference": "OV747",
+            "numero_serie": "SN99251",
+            "date_arrivee": "2025-04-27",
+            "statut": "En réparation",
+            "specifique": 245
+        },
+        {
+            "identifiant": "O007",
+            "marque": "Haier",
+            "reference": "OV708",
+            "numero_serie": "SN71411",
+            "date_arrivee": "2025-05-24",
+            "statut": "A Nettoyer",
+            "specifique": 236
+        },
+        {
+            "identifiant": "O008",
+            "marque": "Beko",
+            "reference": "OV500",
+            "numero_serie": "SN51547",
+            "date_arrivee": "2025-05-25",
+            "statut": "Prêt à livrer",
+            "specifique": 234
+        },
+        {
+            "identifiant": "O009",
+            "marque": "Indesit",
+            "reference": "OV295",
+            "numero_serie": "SN62647",
+            "date_arrivee": "2025-04-27",
+            "statut": "En attente",
+            "specifique": 109
+        },
+        {
+            "identifiant": "O010",
+            "marque": "Samsung",
+            "reference": "OV569",
+            "numero_serie": "SN70092",
+            "date_arrivee": "2025-05-22",
+            "statut": "A Nettoyer",
+            "specifique": 210
+        },
+        {
+            "identifiant": "O011",
+            "marque": "Candy",
+            "reference": "OV114",
+            "numero_serie": "SN12638",
+            "date_arrivee": "2025-05-05",
+            "statut": "Prêt à livrer",
+            "specifique": 241
+        },
+        {
+            "identifiant": "O012",
+            "marque": "Beko",
+            "reference": "OV645",
+            "numero_serie": "SN41831",
+            "date_arrivee": "2025-05-17",
+            "statut": "Réparé",
+            "specifique": 232
+        },
+        {
+            "identifiant": "O013",
+            "marque": "Indesit",
+            "reference": "OV204",
+            "numero_serie": "SN12134",
+            "date_arrivee": "2025-05-24",
+            "statut": "Réparé",
+            "specifique": 231
+        },
+        {
+            "identifiant": "O014",
+            "marque": "Electrolux",
+            "reference": "OV815",
+            "numero_serie": "SN74574",
+            "date_arrivee": "2025-05-04",
+            "statut": "Réparé",
+            "specifique": 106
+        },
+        {
+            "identifiant": "O015",
+            "marque": "Beko",
+            "reference": "OV986",
+            "numero_serie": "SN88674",
+            "date_arrivee": "2025-04-29",
+            "statut": "Prêt à livrer",
+            "specifique": 232
+        },
+        {
+            "identifiant": "O016",
+            "marque": "LG",
+            "reference": "OV779",
+            "numero_serie": "SN38043",
+            "date_arrivee": "2025-05-17",
+            "statut": "Réparé",
+            "specifique": 177
+        },
+        {
+            "identifiant": "O017",
+            "marque": "Haier",
+            "reference": "OV147",
+            "numero_serie": "SN52593",
+            "date_arrivee": "2025-05-25",
+            "statut": "En attente",
+            "specifique": 199
+        },
+        {
+            "identifiant": "O018",
+            "marque": "Bosch",
+            "reference": "OV543",
+            "numero_serie": "SN59469",
+            "date_arrivee": "2025-05-24",
+            "statut": "En réparation",
+            "specifique": 131
+        },
+        {
+            "identifiant": "O019",
+            "marque": "LG",
+            "reference": "OV679",
+            "numero_serie": "SN64469",
+            "date_arrivee": "2025-05-11",
+            "statut": "En test",
+            "specifique": 161
+        },
+        {
+            "identifiant": "O020",
+            "marque": "Bosch",
+            "reference": "OV718",
+            "numero_serie": "SN93068",
+            "date_arrivee": "2025-05-01",
+            "statut": "En attente",
+            "specifique": 149
+        },
+        {
+            "identifiant": "O021",
+            "marque": "Siemens",
+            "reference": "OV996",
+            "numero_serie": "SN76505",
+            "date_arrivee": "2025-05-02",
+            "statut": "En attente",
+            "specifique": 184
+        },
+        {
+            "identifiant": "O022",
+            "marque": "Whirlpool",
+            "reference": "OV705",
+            "numero_serie": "SN79416",
+            "date_arrivee": "2025-05-19",
+            "statut": "Prêt à livrer",
+            "specifique": 241
+        },
+        {
+            "identifiant": "O023",
+            "marque": "Indesit",
+            "reference": "OV430",
+            "numero_serie": "SN84138",
+            "date_arrivee": "2025-05-01",
+            "statut": "Prêt à livrer",
+            "specifique": 162
+        },
+        {
+            "identifiant": "O024",
+            "marque": "Siemens",
+            "reference": "OV888",
+            "numero_serie": "SN64069",
+            "date_arrivee": "2025-05-05",
+            "statut": "En réparation",
+            "specifique": 163
+        },
+        {
+            "identifiant": "O025",
+            "marque": "Candy",
+            "reference": "OV705",
+            "numero_serie": "SN98154",
+            "date_arrivee": "2025-04-30",
+            "statut": "En réparation",
+            "specifique": 136
+        },
+        {
+            "identifiant": "O026",
+            "marque": "Bosch",
+            "reference": "OV390",
+            "numero_serie": "SN34780",
+            "date_arrivee": "2025-05-19",
+            "statut": "Réparé",
+            "specifique": 103
+        },
+        {
+            "identifiant": "O027",
+            "marque": "Indesit",
+            "reference": "OV619",
+            "numero_serie": "SN11877",
+            "date_arrivee": "2025-05-11",
+            "statut": "En réparation",
+            "specifique": 112
+        },
+        {
+            "identifiant": "O028",
+            "marque": "Haier",
+            "reference": "OV815",
+            "numero_serie": "SN88280",
+            "date_arrivee": "2025-05-19",
+            "statut": "Réparé",
+            "specifique": 197
+        },
+        {
+            "identifiant": "O029",
+            "marque": "Candy",
+            "reference": "OV597",
+            "numero_serie": "SN41670",
+            "date_arrivee": "2025-05-20",
+            "statut": "A Nettoyer",
+            "specifique": 250
+        },
+        {
+            "identifiant": "O030",
+            "marque": "Haier",
+            "reference": "OV573",
+            "numero_serie": "SN87550",
+            "date_arrivee": "2025-05-04",
+            "statut": "En attente",
+            "specifique": 210
+        },
+        {
+            "identifiant": "O031",
+            "marque": "Bosch",
+            "reference": "OV998",
+            "numero_serie": "SN52022",
+            "date_arrivee": "2025-05-07",
+            "statut": "En réparation",
+            "specifique": 213
+        },
+        {
+            "identifiant": "O032",
+            "marque": "Beko",
+            "reference": "OV448",
+            "numero_serie": "SN34603",
+            "date_arrivee": "2025-05-12",
+            "statut": "A Nettoyer",
+            "specifique": 167
+        },
+        {
+            "identifiant": "O033",
+            "marque": "Samsung",
+            "reference": "OV449",
+            "numero_serie": "SN46366",
+            "date_arrivee": "2025-05-06",
+            "statut": "En attente",
+            "specifique": 129
+        },
+        {
+            "identifiant": "O034",
+            "marque": "Candy",
+            "reference": "OV821",
+            "numero_serie": "SN60385",
+            "date_arrivee": "2025-05-01",
+            "statut": "En test",
+            "specifique": 122
+        },
+        {
+            "identifiant": "O035",
+            "marque": "Haier",
+            "reference": "OV135",
+            "numero_serie": "SN52942",
+            "date_arrivee": "2025-05-16",
+            "statut": "Prêt à livrer",
+            "specifique": 239
+        },
+        {
+            "identifiant": "O036",
+            "marque": "Bosch",
+            "reference": "OV893",
+            "numero_serie": "SN48661",
+            "date_arrivee": "2025-05-16",
+            "statut": "En réparation",
+            "specifique": 220
+        },
+        {
+            "identifiant": "O037",
+            "marque": "Whirlpool",
+            "reference": "OV342",
+            "numero_serie": "SN50198",
+            "date_arrivee": "2025-05-11",
+            "statut": "En attente",
+            "specifique": 109
+        },
+        {
+            "identifiant": "O038",
+            "marque": "Bosch",
+            "reference": "OV855",
+            "numero_serie": "SN11183",
+            "date_arrivee": "2025-05-08",
+            "statut": "En test",
+            "specifique": 232
+        },
+        {
+            "identifiant": "O039",
+            "marque": "Beko",
+            "reference": "OV943",
+            "numero_serie": "SN29106",
+            "date_arrivee": "2025-05-19",
+            "statut": "En attente",
+            "specifique": 149
+        },
+        {
+            "identifiant": "O040",
+            "marque": "Bosch",
+            "reference": "OV347",
+            "numero_serie": "SN48595",
+            "date_arrivee": "2025-05-12",
+            "statut": "A Nettoyer",
+            "specifique": 235
+        }
+    ],
+    "lave_linge": [
+        {
+            "identifiant": "L001",
+            "marque": "Samsung",
+            "reference": "WL140",
+            "numero_serie": "SN79999",
+            "date_arrivee": "2025-05-25",
+            "statut": "A Nettoyer",
+            "specifique": 9.6
+        },
+        {
+            "identifiant": "L002",
+            "marque": "LG",
+            "reference": "WL913",
+            "numero_serie": "SN14788",
+            "date_arrivee": "2025-05-11",
+            "statut": "A Nettoyer",
+            "specifique": 7.2
+        },
+        {
+            "identifiant": "L003",
+            "marque": "Siemens",
+            "reference": "WL925",
+            "numero_serie": "SN39293",
+            "date_arrivee": "2025-05-16",
+            "statut": "Réparé",
+            "specifique": 6.9
+        },
+        {
+            "identifiant": "L004",
+            "marque": "Electrolux",
+            "reference": "WL836",
+            "numero_serie": "SN69316",
+            "date_arrivee": "2025-05-03",
+            "statut": "Prêt à livrer",
+            "specifique": 6.9
+        },
+        {
+            "identifiant": "L005",
+            "marque": "Candy",
+            "reference": "WL388",
+            "numero_serie": "SN16648",
+            "date_arrivee": "2025-05-13",
+            "statut": "Prêt à livrer",
+            "specifique": 10.3
+        },
+        {
+            "identifiant": "L006",
+            "marque": "Electrolux",
+            "reference": "WL843",
+            "numero_serie": "SN57258",
+            "date_arrivee": "2025-04-27",
+            "statut": "A Nettoyer",
+            "specifique": 6.5
+        },
+        {
+            "identifiant": "L007",
+            "marque": "Beko",
+            "reference": "WL404",
+            "numero_serie": "SN72328",
+            "date_arrivee": "2025-05-26",
+            "statut": "En test",
+            "specifique": 11.7
+        },
+        {
+            "identifiant": "L008",
+            "marque": "Whirlpool",
+            "reference": "WL810",
+            "numero_serie": "SN85102",
+            "date_arrivee": "2025-05-06",
+            "statut": "Prêt à livrer",
+            "specifique": 7.2
+        },
+        {
+            "identifiant": "L009",
+            "marque": "LG",
+            "reference": "WL361",
+            "numero_serie": "SN59505",
+            "date_arrivee": "2025-05-01",
+            "statut": "Prêt à livrer",
+            "specifique": 7.5
+        },
+        {
+            "identifiant": "L010",
+            "marque": "Samsung",
+            "reference": "WL779",
+            "numero_serie": "SN46244",
+            "date_arrivee": "2025-05-25",
+            "statut": "En réparation",
+            "specifique": 11.5
+        },
+        {
+            "identifiant": "L011",
+            "marque": "Samsung",
+            "reference": "WL388",
+            "numero_serie": "SN79234",
+            "date_arrivee": "2025-04-27",
+            "statut": "En test",
+            "specifique": 10.9
+        },
+        {
+            "identifiant": "L012",
+            "marque": "Bosch",
+            "reference": "WL259",
+            "numero_serie": "SN19324",
+            "date_arrivee": "2025-04-30",
+            "statut": "En test",
+            "specifique": 5.4
+        },
+        {
+            "identifiant": "L013",
+            "marque": "Bosch",
+            "reference": "WL924",
+            "numero_serie": "SN61180",
+            "date_arrivee": "2025-05-22",
+            "statut": "En test",
+            "specifique": 7.1
+        },
+        {
+            "identifiant": "L014",
+            "marque": "Candy",
+            "reference": "WL132",
+            "numero_serie": "SN25921",
+            "date_arrivee": "2025-05-11",
+            "statut": "Réparé",
+            "specifique": 6.0
+        },
+        {
+            "identifiant": "L015",
+            "marque": "Haier",
+            "reference": "WL482",
+            "numero_serie": "SN60385",
+            "date_arrivee": "2025-05-09",
+            "statut": "A Nettoyer",
+            "specifique": 6.0
+        },
+        {
+            "identifiant": "L016",
+            "marque": "Indesit",
+            "reference": "WL619",
+            "numero_serie": "SN74513",
+            "date_arrivee": "2025-05-21",
+            "statut": "A Nettoyer",
+            "specifique": 9.1
+        },
+        {
+            "identifiant": "L017",
+            "marque": "Haier",
+            "reference": "WL952",
+            "numero_serie": "SN95384",
+            "date_arrivee": "2025-05-16",
+            "statut": "En réparation",
+            "specifique": 8.2
+        },
+        {
+            "identifiant": "L018",
+            "marque": "Siemens",
+            "reference": "WL224",
+            "numero_serie": "SN47039",
+            "date_arrivee": "2025-05-04",
+            "statut": "Réparé",
+            "specifique": 5.3
+        },
+        {
+            "identifiant": "L019",
+            "marque": "Bosch",
+            "reference": "WL418",
+            "numero_serie": "SN23237",
+            "date_arrivee": "2025-05-02",
+            "statut": "A Nettoyer",
+            "specifique": 5.9
+        },
+        {
+            "identifiant": "L020",
+            "marque": "Indesit",
+            "reference": "WL640",
+            "numero_serie": "SN40856",
+            "date_arrivee": "2025-04-27",
+            "statut": "Réparé",
+            "specifique": 11.9
+        },
+        {
+            "identifiant": "L021",
+            "marque": "Siemens",
+            "reference": "WL515",
+            "numero_serie": "SN70593",
+            "date_arrivee": "2025-05-03",
+            "statut": "A Nettoyer",
+            "specifique": 7.9
+        },
+        {
+            "identifiant": "L022",
+            "marque": "Whirlpool",
+            "reference": "WL900",
+            "numero_serie": "SN73378",
+            "date_arrivee": "2025-04-28",
+            "statut": "Réparé",
+            "specifique": 7.0
+        },
+        {
+            "identifiant": "L023",
+            "marque": "Electrolux",
+            "reference": "WL245",
+            "numero_serie": "SN26075",
+            "date_arrivee": "2025-05-14",
+            "statut": "Réparé",
+            "specifique": 10.0
+        },
+        {
+            "identifiant": "L024",
+            "marque": "LG",
+            "reference": "WL616",
+            "numero_serie": "SN16491",
+            "date_arrivee": "2025-05-04",
+            "statut": "A Nettoyer",
+            "specifique": 10.6
+        },
+        {
+            "identifiant": "L025",
+            "marque": "Indesit",
+            "reference": "WL851",
+            "numero_serie": "SN30144",
+            "date_arrivee": "2025-05-19",
+            "statut": "En test",
+            "specifique": 10.3
+        },
+        {
+            "identifiant": "L026",
+            "marque": "Haier",
+            "reference": "WL323",
+            "numero_serie": "SN96141",
+            "date_arrivee": "2025-05-23",
+            "statut": "En attente",
+            "specifique": 9.5
+        },
+        {
+            "identifiant": "L027",
+            "marque": "Candy",
+            "reference": "WL314",
+            "numero_serie": "SN85036",
+            "date_arrivee": "2025-05-24",
+            "statut": "En test",
+            "specifique": 10.7
+        },
+        {
+            "identifiant": "L028",
+            "marque": "Whirlpool",
+            "reference": "WL175",
+            "numero_serie": "SN12666",
+            "date_arrivee": "2025-05-22",
+            "statut": "Réparé",
+            "specifique": 8.5
+        },
+        {
+            "identifiant": "L029",
+            "marque": "Haier",
+            "reference": "WL137",
+            "numero_serie": "SN11002",
+            "date_arrivee": "2025-05-17",
+            "statut": "Réparé",
+            "specifique": 10.3
+        },
+        {
+            "identifiant": "L030",
+            "marque": "Haier",
+            "reference": "WL864",
+            "numero_serie": "SN77345",
+            "date_arrivee": "2025-05-26",
+            "statut": "En attente",
+            "specifique": 6.0
+        },
+        {
+            "identifiant": "L031",
+            "marque": "Bosch",
+            "reference": "WL593",
+            "numero_serie": "SN68614",
+            "date_arrivee": "2025-05-03",
+            "statut": "En test",
+            "specifique": 10.6
+        },
+        {
+            "identifiant": "L032",
+            "marque": "Candy",
+            "reference": "WL106",
+            "numero_serie": "SN95287",
+            "date_arrivee": "2025-05-21",
+            "statut": "Prêt à livrer",
+            "specifique": 6.8
+        },
+        {
+            "identifiant": "L033",
+            "marque": "Bosch",
+            "reference": "WL615",
+            "numero_serie": "SN46975",
+            "date_arrivee": "2025-05-18",
+            "statut": "A Nettoyer",
+            "specifique": 6.1
+        },
+        {
+            "identifiant": "L034",
+            "marque": "Haier",
+            "reference": "WL366",
+            "numero_serie": "SN67277",
+            "date_arrivee": "2025-05-02",
+            "statut": "Réparé",
+            "specifique": 6.1
+        },
+        {
+            "identifiant": "L035",
+            "marque": "Candy",
+            "reference": "WL108",
+            "numero_serie": "SN94442",
+            "date_arrivee": "2025-05-11",
+            "statut": "En réparation",
+            "specifique": 7.2
+        },
+        {
+            "identifiant": "L036",
+            "marque": "LG",
+            "reference": "WL855",
+            "numero_serie": "SN95984",
+            "date_arrivee": "2025-05-11",
+            "statut": "En attente",
+            "specifique": 9.1
+        },
+        {
+            "identifiant": "L037",
+            "marque": "Siemens",
+            "reference": "WL781",
+            "numero_serie": "SN83550",
+            "date_arrivee": "2025-05-08",
+            "statut": "Prêt à livrer",
+            "specifique": 7.6
+        },
+        {
+            "identifiant": "L038",
+            "marque": "Bosch",
+            "reference": "WL720",
+            "numero_serie": "SN97090",
+            "date_arrivee": "2025-05-05",
+            "statut": "En test",
+            "specifique": 6.7
+        },
+        {
+            "identifiant": "L039",
+            "marque": "Bosch",
+            "reference": "WL471",
+            "numero_serie": "SN36447",
+            "date_arrivee": "2025-04-30",
+            "statut": "En réparation",
+            "specifique": 11.1
+        },
+        {
+            "identifiant": "L040",
+            "marque": "LG",
+            "reference": "WL233",
+            "numero_serie": "SN47424",
+            "date_arrivee": "2025-05-03",
+            "statut": "En réparation",
+            "specifique": 10.7
+        }
+    ],
+    "lave_vaisselle": [
+        {
+            "identifiant": "LV001",
+            "marque": "Indesit",
+            "reference": "DW591",
+            "numero_serie": "SN27880",
+            "date_arrivee": "2025-05-20",
+            "statut": "En attente",
+            "specifique": 11
+        },
+        {
+            "identifiant": "LV002",
+            "marque": "Candy",
+            "reference": "DW247",
+            "numero_serie": "SN67162",
+            "date_arrivee": "2025-05-22",
+            "statut": "A Nettoyer",
+            "specifique": 10
+        },
+        {
+            "identifiant": "LV003",
+            "marque": "Electrolux",
+            "reference": "DW477",
+            "numero_serie": "SN56416",
+            "date_arrivee": "2025-05-22",
+            "statut": "Prêt à livrer",
+            "specifique": 13
+        },
+        {
+            "identifiant": "LV004",
+            "marque": "Samsung",
+            "reference": "DW585",
+            "numero_serie": "SN31599",
+            "date_arrivee": "2025-05-18",
+            "statut": "En test",
+            "specifique": 9
+        },
+        {
+            "identifiant": "LV005",
+            "marque": "Bosch",
+            "reference": "DW309",
+            "numero_serie": "SN36055",
+            "date_arrivee": "2025-05-11",
+            "statut": "Prêt à livrer",
+            "specifique": 11
+        },
+        {
+            "identifiant": "LV006",
+            "marque": "Indesit",
+            "reference": "DW664",
+            "numero_serie": "SN62302",
+            "date_arrivee": "2025-05-04",
+            "statut": "En attente",
+            "specifique": 11
+        },
+        {
+            "identifiant": "LV007",
+            "marque": "Indesit",
+            "reference": "DW383",
+            "numero_serie": "SN25029",
+            "date_arrivee": "2025-05-16",
+            "statut": "Prêt à livrer",
+            "specifique": 10
+        },
+        {
+            "identifiant": "LV008",
+            "marque": "Bosch",
+            "reference": "DW638",
+            "numero_serie": "SN36610",
+            "date_arrivee": "2025-05-20",
+            "statut": "En attente",
+            "specifique": 11
+        },
+        {
+            "identifiant": "LV009",
+            "marque": "Samsung",
+            "reference": "DW886",
+            "numero_serie": "SN86016",
+            "date_arrivee": "2025-05-01",
+            "statut": "Réparé",
+            "specifique": 13
+        },
+        {
+            "identifiant": "LV010",
+            "marque": "Samsung",
+            "reference": "DW300",
+            "numero_serie": "SN32272",
+            "date_arrivee": "2025-05-22",
+            "statut": "Réparé",
+            "specifique": 9
+        },
+        {
+            "identifiant": "LV011",
+            "marque": "Bosch",
+            "reference": "DW385",
+            "numero_serie": "SN92792",
+            "date_arrivee": "2025-05-19",
+            "statut": "Réparé",
+            "specifique": 12
+        },
+        {
+            "identifiant": "LV012",
+            "marque": "Candy",
+            "reference": "DW833",
+            "numero_serie": "SN32318",
+            "date_arrivee": "2025-05-08",
+            "statut": "A Nettoyer",
+            "specifique": 12
+        },
+        {
+            "identifiant": "LV013",
+            "marque": "Haier",
+            "reference": "DW536",
+            "numero_serie": "SN64627",
+            "date_arrivee": "2025-04-28",
+            "statut": "Prêt à livrer",
+            "specifique": 15
+        },
+        {
+            "identifiant": "LV014",
+            "marque": "Samsung",
+            "reference": "DW245",
+            "numero_serie": "SN39190",
+            "date_arrivee": "2025-05-04",
+            "statut": "En test",
+            "specifique": 9
+        },
+        {
+            "identifiant": "LV015",
+            "marque": "Siemens",
+            "reference": "DW388",
+            "numero_serie": "SN38601",
+            "date_arrivee": "2025-05-10",
+            "statut": "En attente",
+            "specifique": 13
+        },
+        {
+            "identifiant": "LV016",
+            "marque": "Bosch",
+            "reference": "DW560",
+            "numero_serie": "SN52901",
+            "date_arrivee": "2025-05-09",
+            "statut": "En attente",
+            "specifique": 16
+        },
+        {
+            "identifiant": "LV017",
+            "marque": "Indesit",
+            "reference": "DW578",
+            "numero_serie": "SN38335",
+            "date_arrivee": "2025-05-02",
+            "statut": "Réparé",
+            "specifique": 8
+        },
+        {
+            "identifiant": "LV018",
+            "marque": "Siemens",
+            "reference": "DW360",
+            "numero_serie": "SN95869",
+            "date_arrivee": "2025-05-24",
+            "statut": "A Nettoyer",
+            "specifique": 12
+        },
+        {
+            "identifiant": "LV019",
+            "marque": "LG",
+            "reference": "DW714",
+            "numero_serie": "SN63975",
+            "date_arrivee": "2025-05-12",
+            "statut": "Prêt à livrer",
+            "specifique": 15
+        },
+        {
+            "identifiant": "LV020",
+            "marque": "Whirlpool",
+            "reference": "DW485",
+            "numero_serie": "SN84847",
+            "date_arrivee": "2025-04-27",
+            "statut": "En attente",
+            "specifique": 14
+        },
+        {
+            "identifiant": "LV021",
+            "marque": "Whirlpool",
+            "reference": "DW106",
+            "numero_serie": "SN77881",
+            "date_arrivee": "2025-05-21",
+            "statut": "Prêt à livrer",
+            "specifique": 15
+        },
+        {
+            "identifiant": "LV022",
+            "marque": "Candy",
+            "reference": "DW510",
+            "numero_serie": "SN34897",
+            "date_arrivee": "2025-05-04",
+            "statut": "A Nettoyer",
+            "specifique": 12
+        },
+        {
+            "identifiant": "LV023",
+            "marque": "Haier",
+            "reference": "DW111",
+            "numero_serie": "SN70156",
+            "date_arrivee": "2025-05-09",
+            "statut": "Prêt à livrer",
+            "specifique": 11
+        },
+        {
+            "identifiant": "LV024",
+            "marque": "Beko",
+            "reference": "DW139",
+            "numero_serie": "SN97990",
+            "date_arrivee": "2025-05-03",
+            "statut": "En test",
+            "specifique": 10
+        },
+        {
+            "identifiant": "LV025",
+            "marque": "Indesit",
+            "reference": "DW911",
+            "numero_serie": "SN17180",
+            "date_arrivee": "2025-05-23",
+            "statut": "A Nettoyer",
+            "specifique": 12
+        },
+        {
+            "identifiant": "LV026",
+            "marque": "Siemens",
+            "reference": "DW263",
+            "numero_serie": "SN51742",
+            "date_arrivee": "2025-05-09",
+            "statut": "En test",
+            "specifique": 11
+        },
+        {
+            "identifiant": "LV027",
+            "marque": "Indesit",
+            "reference": "DW846",
+            "numero_serie": "SN41801",
+            "date_arrivee": "2025-05-26",
+            "statut": "Réparé",
+            "specifique": 8
+        },
+        {
+            "identifiant": "LV028",
+            "marque": "Haier",
+            "reference": "DW200",
+            "numero_serie": "SN41094",
+            "date_arrivee": "2025-05-13",
+            "statut": "Prêt à livrer",
+            "specifique": 11
+        },
+        {
+            "identifiant": "LV029",
+            "marque": "Beko",
+            "reference": "DW784",
+            "numero_serie": "SN49787",
+            "date_arrivee": "2025-05-02",
+            "statut": "A Nettoyer",
+            "specifique": 11
+        },
+        {
+            "identifiant": "LV030",
+            "marque": "Samsung",
+            "reference": "DW968",
+            "numero_serie": "SN10734",
+            "date_arrivee": "2025-05-14",
+            "statut": "A Nettoyer",
+            "specifique": 11
+        },
+        {
+            "identifiant": "LV031",
+            "marque": "Whirlpool",
+            "reference": "DW540",
+            "numero_serie": "SN92329",
+            "date_arrivee": "2025-05-22",
+            "statut": "Réparé",
+            "specifique": 14
+        },
+        {
+            "identifiant": "LV032",
+            "marque": "Siemens",
+            "reference": "DW298",
+            "numero_serie": "SN71302",
+            "date_arrivee": "2025-05-08",
+            "statut": "En test",
+            "specifique": 14
+        },
+        {
+            "identifiant": "LV033",
+            "marque": "Bosch",
+            "reference": "DW117",
+            "numero_serie": "SN20293",
+            "date_arrivee": "2025-05-24",
+            "statut": "En test",
+            "specifique": 9
+        },
+        {
+            "identifiant": "LV034",
+            "marque": "Whirlpool",
+            "reference": "DW427",
+            "numero_serie": "SN26784",
+            "date_arrivee": "2025-05-13",
+            "statut": "En test",
+            "specifique": 9
+        },
+        {
+            "identifiant": "LV035",
+            "marque": "Samsung",
+            "reference": "DW481",
+            "numero_serie": "SN78040",
+            "date_arrivee": "2025-05-13",
+            "statut": "En test",
+            "specifique": 11
+        },
+        {
+            "identifiant": "LV036",
+            "marque": "Beko",
+            "reference": "DW447",
+            "numero_serie": "SN52786",
+            "date_arrivee": "2025-05-26",
+            "statut": "Prêt à livrer",
+            "specifique": 14
+        },
+        {
+            "identifiant": "LV037",
+            "marque": "Samsung",
+            "reference": "DW914",
+            "numero_serie": "SN48766",
+            "date_arrivee": "2025-05-12",
+            "statut": "Réparé",
+            "specifique": 13
+        },
+        {
+            "identifiant": "LV038",
+            "marque": "Candy",
+            "reference": "DW873",
+            "numero_serie": "SN50838",
+            "date_arrivee": "2025-05-22",
+            "statut": "A Nettoyer",
+            "specifique": 10
+        },
+        {
+            "identifiant": "LV039",
+            "marque": "Indesit",
+            "reference": "DW349",
+            "numero_serie": "SN79397",
+            "date_arrivee": "2025-04-30",
+            "statut": "En attente",
+            "specifique": 10
+        },
+        {
+            "identifiant": "LV040",
+            "marque": "Whirlpool",
+            "reference": "DW398",
+            "numero_serie": "SN81402",
+            "date_arrivee": "2025-05-03",
+            "statut": "Prêt à livrer",
+            "specifique": 15
+        }
+    ],
+    "lave_linge_sechant": [
+        {
+            "identifiant": "LS001",
+            "marque": "Samsung",
+            "reference": "WD431",
+            "numero_serie": "SN94532",
+            "date_arrivee": "2025-05-02",
+            "statut": "Prêt à livrer",
+            "specifique": 7.5,
+            "capacite_sechage": 4.5
+        },
+        {
+            "identifiant": "LS002",
+            "marque": "Candy",
+            "reference": "WD813",
+            "numero_serie": "SN31775",
+            "date_arrivee": "2025-05-04",
+            "statut": "En test",
+            "specifique": 7.6,
+            "capacite_sechage": 6.6
+        },
+        {
+            "identifiant": "LS003",
+            "marque": "Siemens",
+            "reference": "WD576",
+            "numero_serie": "SN54156",
+            "date_arrivee": "2025-05-18",
+            "statut": "Prêt à livrer",
+            "specifique": 8.5,
+            "capacite_sechage": 5.8
+        },
+        {
+            "identifiant": "LS004",
+            "marque": "LG",
+            "reference": "WD709",
+            "numero_serie": "SN90994",
+            "date_arrivee": "2025-05-14",
+            "statut": "A Nettoyer",
+            "specifique": 10.0,
+            "capacite_sechage": 4.7
+        },
+        {
+            "identifiant": "LS005",
+            "marque": "Bosch",
+            "reference": "WD160",
+            "numero_serie": "SN60194",
+            "date_arrivee": "2025-04-29",
+            "statut": "En attente",
+            "specifique": 9.3,
+            "capacite_sechage": 6.9
+        },
+        {
+            "identifiant": "LS006",
+            "marque": "Electrolux",
+            "reference": "WD279",
+            "numero_serie": "SN64538",
+            "date_arrivee": "2025-04-29",
+            "statut": "En réparation",
+            "specifique": 7.6,
+            "capacite_sechage": 5.8
+        },
+        {
+            "identifiant": "LS007",
+            "marque": "Indesit",
+            "reference": "WD515",
+            "numero_serie": "SN70150",
+            "date_arrivee": "2025-05-20",
+            "statut": "En réparation",
+            "specifique": 7.6,
+            "capacite_sechage": 7.8
+        },
+        {
+            "identifiant": "LS008",
+            "marque": "Candy",
+            "reference": "WD834",
+            "numero_serie": "SN73936",
+            "date_arrivee": "2025-05-06",
+            "statut": "Réparé",
+            "specifique": 8.1,
+            "capacite_sechage": 5.4
+        },
+        {
+            "identifiant": "LS009",
+            "marque": "LG",
+            "reference": "WD717",
+            "numero_serie": "SN17515",
+            "date_arrivee": "2025-05-06",
+            "statut": "Réparé",
+            "specifique": 8.4,
+            "capacite_sechage": 7.9
+        },
+        {
+            "identifiant": "LS010",
+            "marque": "Beko",
+            "reference": "WD536",
+            "numero_serie": "SN75055",
+            "date_arrivee": "2025-05-13",
+            "statut": "En test",
+            "specifique": 9.5,
+            "capacite_sechage": 4.9
+        },
+        {
+            "identifiant": "LS011",
+            "marque": "LG",
+            "reference": "WD627",
+            "numero_serie": "SN82745",
+            "date_arrivee": "2025-04-30",
+            "statut": "En attente",
+            "specifique": 8.7,
+            "capacite_sechage": 6.2
+        },
+        {
+            "identifiant": "LS012",
+            "marque": "Electrolux",
+            "reference": "WD144",
+            "numero_serie": "SN41900",
+            "date_arrivee": "2025-05-18",
+            "statut": "En test",
+            "specifique": 9.2,
+            "capacite_sechage": 4.7
+        },
+        {
+            "identifiant": "LS013",
+            "marque": "Beko",
+            "reference": "WD808",
+            "numero_serie": "SN56143",
+            "date_arrivee": "2025-04-28",
+            "statut": "En réparation",
+            "specifique": 10.0,
+            "capacite_sechage": 5.7
+        },
+        {
+            "identifiant": "LS014",
+            "marque": "Candy",
+            "reference": "WD251",
+            "numero_serie": "SN55008",
+            "date_arrivee": "2025-05-04",
+            "statut": "A Nettoyer",
+            "specifique": 8.3,
+            "capacite_sechage": 4.5
+        },
+        {
+            "identifiant": "LS015",
+            "marque": "Candy",
+            "reference": "WD455",
+            "numero_serie": "SN62705",
+            "date_arrivee": "2025-05-20",
+            "statut": "Prêt à livrer",
+            "specifique": 7.4,
+            "capacite_sechage": 7.1
+        },
+        {
+            "identifiant": "LS016",
+            "marque": "Beko",
+            "reference": "WD424",
+            "numero_serie": "SN89659",
+            "date_arrivee": "2025-05-10",
+            "statut": "En réparation",
+            "specifique": 8.0,
+            "capacite_sechage": 4.6
+        },
+        {
+            "identifiant": "LS017",
+            "marque": "Haier",
+            "reference": "WD271",
+            "numero_serie": "SN18051",
+            "date_arrivee": "2025-05-16",
+            "statut": "A Nettoyer",
+            "specifique": 9.8,
+            "capacite_sechage": 5.4
+        },
+        {
+            "identifiant": "LS018",
+            "marque": "Bosch",
+            "reference": "WD450",
+            "numero_serie": "SN21691",
+            "date_arrivee": "2025-05-25",
+            "statut": "En test",
+            "specifique": 9.3,
+            "capacite_sechage": 4.4
+        },
+        {
+            "identifiant": "LS019",
+            "marque": "Whirlpool",
+            "reference": "WD120",
+            "numero_serie": "SN91418",
+            "date_arrivee": "2025-05-21",
+            "statut": "Réparé",
+            "specifique": 9.0,
+            "capacite_sechage": 7.3
+        },
+        {
+            "identifiant": "LS020",
+            "marque": "Whirlpool",
+            "reference": "WD657",
+            "numero_serie": "SN30994",
+            "date_arrivee": "2025-05-25",
+            "statut": "En test",
+            "specifique": 7.2,
+            "capacite_sechage": 4.0
+        },
+        {
+            "identifiant": "LS021",
+            "marque": "Beko",
+            "reference": "WD721",
+            "numero_serie": "SN41777",
+            "date_arrivee": "2025-05-07",
+            "statut": "En attente",
+            "specifique": 7.7,
+            "capacite_sechage": 6.5
+        },
+        {
+            "identifiant": "LS022",
+            "marque": "Candy",
+            "reference": "WD835",
+            "numero_serie": "SN12019",
+            "date_arrivee": "2025-05-06",
+            "statut": "En réparation",
+            "specifique": 9.0,
+            "capacite_sechage": 7.8
+        },
+        {
+            "identifiant": "LS023",
+            "marque": "Beko",
+            "reference": "WD853",
+            "numero_serie": "SN66753",
+            "date_arrivee": "2025-05-09",
+            "statut": "En réparation",
+            "specifique": 8.6,
+            "capacite_sechage": 8.0
+        },
+        {
+            "identifiant": "LS024",
+            "marque": "Indesit",
+            "reference": "WD159",
+            "numero_serie": "SN52586",
+            "date_arrivee": "2025-05-07",
+            "statut": "En réparation",
+            "specifique": 9.2,
+            "capacite_sechage": 6.3
+        },
+        {
+            "identifiant": "LS025",
+            "marque": "Siemens",
+            "reference": "WD181",
+            "numero_serie": "SN74798",
+            "date_arrivee": "2025-04-28",
+            "statut": "En test",
+            "specifique": 8.1,
+            "capacite_sechage": 6.9
+        },
+        {
+            "identifiant": "LS026",
+            "marque": "Indesit",
+            "reference": "WD132",
+            "numero_serie": "SN23547",
+            "date_arrivee": "2025-05-13",
+            "statut": "Réparé",
+            "specifique": 8.9,
+            "capacite_sechage": 7.9
+        },
+        {
+            "identifiant": "LS027",
+            "marque": "Whirlpool",
+            "reference": "WD240",
+            "numero_serie": "SN78967",
+            "date_arrivee": "2025-05-12",
+            "statut": "En réparation",
+            "specifique": 7.0,
+            "capacite_sechage": 4.7
+        },
+        {
+            "identifiant": "LS028",
+            "marque": "Whirlpool",
+            "reference": "WD613",
+            "numero_serie": "SN22778",
+            "date_arrivee": "2025-05-10",
+            "statut": "En test",
+            "specifique": 9.5,
+            "capacite_sechage": 4.2
+        },
+        {
+            "identifiant": "LS029",
+            "marque": "Haier",
+            "reference": "WD873",
+            "numero_serie": "SN63834",
+            "date_arrivee": "2025-05-14",
+            "statut": "En réparation",
+            "specifique": 7.0,
+            "capacite_sechage": 5.1
+        },
+        {
+            "identifiant": "LS030",
+            "marque": "Bosch",
+            "reference": "WD650",
+            "numero_serie": "SN12392",
+            "date_arrivee": "2025-05-06",
+            "statut": "Prêt à livrer",
+            "specifique": 8.9,
+            "capacite_sechage": 4.3
+        },
+        {
+            "identifiant": "LS031",
+            "marque": "Samsung",
+            "reference": "WD189",
+            "numero_serie": "SN47034",
+            "date_arrivee": "2025-05-25",
+            "statut": "Réparé",
+            "specifique": 9.7,
+            "capacite_sechage": 6.3
+        },
+        {
+            "identifiant": "LS032",
+            "marque": "Electrolux",
+            "reference": "WD840",
+            "numero_serie": "SN89676",
+            "date_arrivee": "2025-05-23",
+            "statut": "En réparation",
+            "specifique": 9.2,
+            "capacite_sechage": 7.0
+        },
+        {
+            "identifiant": "LS033",
+            "marque": "Electrolux",
+            "reference": "WD335",
+            "numero_serie": "SN90135",
+            "date_arrivee": "2025-05-15",
+            "statut": "Réparé",
+            "specifique": 8.3,
+            "capacite_sechage": 5.6
+        },
+        {
+            "identifiant": "LS034",
+            "marque": "Indesit",
+            "reference": "WD807",
+            "numero_serie": "SN11444",
+            "date_arrivee": "2025-05-24",
+            "statut": "En réparation",
+            "specifique": 9.7,
+            "capacite_sechage": 6.6
+        },
+        {
+            "identifiant": "LS035",
+            "marque": "Beko",
+            "reference": "WD992",
+            "numero_serie": "SN73482",
+            "date_arrivee": "2025-04-29",
+            "statut": "Prêt à livrer",
+            "specifique": 9.7,
+            "capacite_sechage": 6.7
+        },
+        {
+            "identifiant": "LS036",
+            "marque": "Samsung",
+            "reference": "WD506",
+            "numero_serie": "SN92845",
+            "date_arrivee": "2025-05-01",
+            "statut": "Prêt à livrer",
+            "specifique": 8.9,
+            "capacite_sechage": 5.9
+        },
+        {
+            "identifiant": "LS037",
+            "marque": "Electrolux",
+            "reference": "WD495",
+            "numero_serie": "SN56849",
+            "date_arrivee": "2025-05-10",
+            "statut": "Prêt à livrer",
+            "specifique": 8.9,
+            "capacite_sechage": 4.6
+        },
+        {
+            "identifiant": "LS038",
+            "marque": "Haier",
+            "reference": "WD436",
+            "numero_serie": "SN12325",
+            "date_arrivee": "2025-05-05",
+            "statut": "Réparé",
+            "specifique": 9.4,
+            "capacite_sechage": 5.9
+        },
+        {
+            "identifiant": "LS039",
+            "marque": "Electrolux",
+            "reference": "WD984",
+            "numero_serie": "SN21570",
+            "date_arrivee": "2025-05-19",
+            "statut": "En attente",
+            "specifique": 7.1,
+            "capacite_sechage": 7.3
+        },
+        {
+            "identifiant": "LS040",
+            "marque": "Electrolux",
+            "reference": "WD107",
+            "numero_serie": "SN59848",
+            "date_arrivee": "2025-04-28",
+            "statut": "En test",
+            "specifique": 9.5,
+            "capacite_sechage": 5.4
+        }
+    ]
 }

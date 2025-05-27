@@ -61,7 +61,27 @@ class DetailsWindow(tk.Toplevel):
         elif hasattr(self.appareil, 'capacite_sechage'):
             ttk.Label(spec_frame, text="Capacité de séchage:").grid(row=0, column=0, sticky="w", pady=2)
             ttk.Label(spec_frame, text=f"{self.appareil.capacite_sechage}kg").grid(row=0, column=1, sticky="w", pady=2)
+        
+        # Localisation
+        loc_frame = ttk.LabelFrame(main_frame, text="Localisation", padding="5")
+        loc_frame.pack(fill="x", pady=5)
+        
+        localisation = self.appareil.get_localisation()
+        ttk.Label(loc_frame, text="Position:").grid(row=0, column=0, sticky="w", pady=2)
+        ttk.Label(loc_frame, text=localisation).grid(row=0, column=1, sticky="w", pady=2)
+        
+        # Métadonnées
+        if self.metadonnees:
+            meta_frame = ttk.LabelFrame(main_frame, text="Métadonnées", padding="5")
+            meta_frame.pack(fill="x", pady=5)
             
+            row = 0
+            for key, value in self.metadonnees.items():
+                if value is not None:
+                    ttk.Label(meta_frame, text=f"{key}:").grid(row=row, column=0, sticky="w", pady=2)
+                    ttk.Label(meta_frame, text=str(value)).grid(row=row, column=1, sticky="w", pady=2)
+                    row += 1
+        
         # Informations de réparation
         if self.metadonnees:
             rep_frame = ttk.LabelFrame(main_frame, text="Informations de réparation", padding="5")
