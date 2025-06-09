@@ -207,4 +207,4 @@ class MainWindow(tk.Tk):
                 ))
                 
     def ouvrir_ajout(self):
-        AjoutWindow(self) 
+        AjoutWindow(self, self.refresh_liste) 
