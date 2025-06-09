@@ -84,7 +84,7 @@ class AjoutWindow(tk.Toplevel):
         ttk.Label(main_frame, text="Statut:").pack(fill="x", pady=5)
         self.statut_var = tk.StringVar(value="en stock")
         self.statut_combo = ttk.Combobox(main_frame, textvariable=self.statut_var, 
-                                       values=["en stock", "en réparation", "réparé", "livré"], 
+                                       values=["en stock", "réparé", "livré"], 
                                        state="readonly")
         self.statut_combo.pack(fill="x", pady=5)
         
