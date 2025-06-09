@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 from datetime import datetime
+from tkcalendar import DateEntry
 from app.models.appareil import Appareil
 from app.models.frigo import Frigo
 from app.models.four import Four
@@ -73,11 +74,11 @@ class AjoutWindow(tk.Toplevel):
         self.numero_serie_entry = ttk.Entry(main_frame, textvariable=self.numero_serie_var)
         self.numero_serie_entry.pack(fill="x", pady=5)
         
-        # Date d'arrivée
+        # Date d'arrivée avec calendrier
         ttk.Label(main_frame, text="Date d'arrivée:").pack(fill="x", pady=5)
-        self.date_arrivee_var = tk.StringVar()
-        self.date_arrivee_entry = ttk.Entry(main_frame, textvariable=self.date_arrivee_var)
-        self.date_arrivee_entry.pack(fill="x", pady=5)
+        self.date_arrivee_cal = DateEntry(main_frame, width=12, background='darkblue',
+                                        foreground='white', borderwidth=2, date_pattern='dd/mm/yyyy')
+        self.date_arrivee_cal.pack(fill="x", pady=5)
         
         # Statut
         ttk.Label(main_frame, text="Statut:").pack(fill="x", pady=5)
@@ -162,7 +163,7 @@ class AjoutWindow(tk.Toplevel):
         marque = self.marque_var.get()
         reference = self.reference_var.get()
         numero_serie = self.numero_serie_var.get()
-        date_arrivee = self.date_arrivee_var.get()
+        date_arrivee = self.date_arrivee_cal.get_date().strftime("%d/%m/%Y")
         statut = self.statut_var.get()
         cellule = self.cellule_var.get()
         emplacement = self.emplacement_var.get()
