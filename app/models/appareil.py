@@ -1,4 +1,4 @@
-class AppareilElectromenager:
+class Appareil:
     def __init__(self, identifiant: str, marque: str, reference: str, numero_serie: str, date_arrivee: str, statut: str, cellule: str = None, emplacement: int = None, position: str = None):
         self.identifiant = identifiant
         self.marque = marque

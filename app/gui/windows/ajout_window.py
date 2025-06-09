@@ -1,10 +1,13 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
+from datetime import datetime
+from app.models.appareil import Appareil
 from app.models.frigo import Frigo
 from app.models.four import Four
 from app.models.lave_linge import LaveLinge
 from app.models.lave_vaisselle import LaveVaisselle
 from app.models.lave_linge_sechant import LaveLingeSechant
+from app.models.seche_linge import SecheLinge
 
 class AjoutWindow(tk.Toplevel):
     def __init__(self, parent, callback):
