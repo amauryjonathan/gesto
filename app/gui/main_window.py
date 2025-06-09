@@ -103,8 +103,8 @@ class MainWindow(tk.Tk):
         
         # Statut
         ttk.Label(form_frame, text="Statut:").grid(row=3, column=0, sticky=tk.W, pady=5)
-        self.statut_var = tk.StringVar(value="En cours")
-        statuts = ["En cours", "Résolu", "En attente de pièces"]
+        self.statut_var = tk.StringVar(value="à réparer")
+        statuts = ["à réparer", "diagnostiquer", "réparer"]
         ttk.Combobox(form_frame, textvariable=self.statut_var, values=statuts).grid(row=3, column=1, sticky=tk.W, pady=5)
         
         # Boutons
@@ -166,7 +166,7 @@ class MainWindow(tk.Tk):
         self.type_panne_var.set("")
         self.notes_text.delete(1.0, tk.END)
         self.technicien_var.set("")
-        self.statut_var.set("En cours")
+        self.statut_var.set("à réparer")
         
     def refresh_liste(self):
         # Effacer la liste

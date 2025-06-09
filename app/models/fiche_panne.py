@@ -6,7 +6,7 @@ class FichePanne:
         self.type_panne = ""
         self.cause_probable = ""
         self.notes_techniques = ""
-        self.statut = "En cours"  # En cours, Résolu, En attente de pièces
+        self.statut = "à réparer"  # à réparer, diagnostiquer, réparer
         self.date_resolution = None
         self.technicien = ""
         

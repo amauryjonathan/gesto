@@ -54,7 +54,7 @@ class DetailWindow(tk.Toplevel):
         
         # Statut
         ttk.Label(main_frame, text="Statut:").grid(row=6, column=0, sticky=tk.W, pady=5)
-        statuts = ["A Nettoyer", "En attente", "En réparation", "Réparé", "En test", "Prêt à livrer"]
+        statuts = ["à réparer", "diagnostiquer", "réparer"]
         ttk.Combobox(main_frame, textvariable=self.statut_var, values=statuts).grid(row=6, column=1, sticky=tk.W, pady=5)
         
         # Localisation
