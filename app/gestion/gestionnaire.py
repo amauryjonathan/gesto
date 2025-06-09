@@ -201,4 +201,24 @@ class GestionnaireAppareils:
             for appareil in appareils:
                 if appareil.identifiant == appareil_id:
                     return appareil
-        return None 
+        return None
+
+    def emplacement_occupe(self, cellule: str, emplacement: int, position: str) -> bool:
+        """
+        Vérifie si un emplacement est déjà occupé par un appareil.
+        
+        Args:
+            cellule (str): La cellule (A-R)
+            emplacement (int): Le numéro d'emplacement (1-9)
+            position (str): La position (A ou B)
+            
+        Returns:
+            bool: True si l'emplacement est occupé, False sinon
+        """
+        for type_app, liste in self.appareils.items():
+            for appareil in liste:
+                if (appareil.cellule == cellule and 
+                    appareil.emplacement == emplacement and 
+                    appareil.position == position):
+                    return True
+        return False 

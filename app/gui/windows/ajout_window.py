@@ -82,24 +82,11 @@ class AjoutWindow(tk.Toplevel):
         
         # Statut
         ttk.Label(main_frame, text="Statut:").pack(fill="x", pady=5)
-        self.statut_var = tk.StringVar(value="en stock")
+        self.statut_var = tk.StringVar(value="à réparer")
         self.statut_combo = ttk.Combobox(main_frame, textvariable=self.statut_var, 
-                                       values=["en stock", "réparé", "livré"], 
+                                       values=["à réparer", "diagnostiquer", "réparer"], 
                                        state="readonly")
         self.statut_combo.pack(fill="x", pady=5)
-        
-        # Caractéristique spécifique
-        ttk.Label(main_frame, text="Caractéristique spécifique:").pack(fill="x", pady=5)
-        self.specifique_var = tk.StringVar()
-        self.specifique_entry = ttk.Entry(main_frame, textvariable=self.specifique_var)
-        self.specifique_entry.pack(fill="x", pady=5)
-        
-        # Capacité de séchage (initialement caché)
-        self.capacite_sechage_frame = ttk.Frame(main_frame)
-        ttk.Label(self.capacite_sechage_frame, text="Cap. séchage (kg):").pack(side="left")
-        self.capacite_sechage_var = tk.StringVar()
-        self.capacite_sechage_entry = ttk.Entry(self.capacite_sechage_frame, textvariable=self.capacite_sechage_var, width=10)
-        self.capacite_sechage_entry.pack(side="left", padx=5)
         
         # Frame pour la localisation
         localisation_frame = ttk.LabelFrame(main_frame, text="Localisation", padding="5")
@@ -136,21 +123,8 @@ class AjoutWindow(tk.Toplevel):
     def on_type_change(self, event=None):
         """Gère le changement de type d'appareil"""
         type_app = self.type_var.get()
+        pass
         
-        # Afficher/masquer le champ de capacité de séchage
-        if type_app == "lave_linge_sechant":
-            self.capacite_sechage_frame.pack(fill="x", pady=5)
-        else:
-            self.capacite_sechage_frame.pack_forget()
-            
-        # Mettre à jour le label de la caractéristique spécifique
-        if type_app == "frigo":
-            ttk.Label(self.specifique_entry.master, text="Température (°C):").pack(fill="x", pady=5)
-        elif type_app in ["lave_linge", "lave_vaisselle"]:
-            ttk.Label(self.specifique_entry.master, text="Capacité (kg):").pack(fill="x", pady=5)
-        elif type_app == "four":
-            ttk.Label(self.specifique_entry.master, text="Volume (L):").pack(fill="x", pady=5)
-            
     def verifier_appareil_existant(self, type_app, marque, reference):
         """Vérifie si l'appareil existe déjà"""
         appareil_id = f"{type_app}_{marque}_{reference}"
@@ -160,7 +134,7 @@ class AjoutWindow(tk.Toplevel):
         """Ajoute un nouvel appareil"""
         # Récupération des valeurs
         type_app = self.type_var.get()
-        marque = self.marque_var.get()
+        marque = self.marque_var.get() or "NR"
         reference = self.reference_var.get()
         numero_serie = self.numero_serie_var.get()
         date_arrivee = self.date_arrivee_cal.get_date().strftime("%d/%m/%Y")
@@ -170,8 +144,17 @@ class AjoutWindow(tk.Toplevel):
         position = self.position_var.get()
         
         # Vérification des champs obligatoires
-        if not all([type_app, marque, reference, numero_serie, date_arrivee]):
-            messagebox.showerror("Erreur", "Tous les champs sont obligatoires!")
+        if not type_app:
+            messagebox.showerror("Erreur", "Le type d'appareil est obligatoire!")
+            return
+        if not marque:
+            messagebox.showerror("Erreur", "La marque est obligatoire!")
+            return
+        if not reference:
+            messagebox.showerror("Erreur", "La référence est obligatoire!")
+            return
+        if not numero_serie:
+            messagebox.showerror("Erreur", "Le numéro de série est obligatoire!")
             return
             
         # Vérification si l'appareil existe déjà
@@ -182,29 +165,27 @@ class AjoutWindow(tk.Toplevel):
         try:
             # Création de l'appareil selon son type
             if type_app == "frigo":
-                temperature = float(self.specifique_var.get())
                 appareil = Frigo(f"F{len(self.master.gestionnaire.appareils['frigo'])+1:03d}", marque, reference, 
-                               numero_serie, date_arrivee, statut, temperature)
+                               numero_serie, date_arrivee, statut, 0)
             elif type_app == "four":
-                volume = float(self.specifique_var.get())
                 appareil = Four(f"O{len(self.master.gestionnaire.appareils['four'])+1:03d}", marque, reference, 
-                              numero_serie, date_arrivee, statut, volume)
+                              numero_serie, date_arrivee, statut, 0)
             elif type_app == "lave_linge":
-                capacite = float(self.specifique_var.get())
                 appareil = LaveLinge(f"L{len(self.master.gestionnaire.appareils['lave_linge'])+1:03d}", marque, reference, 
-                                   numero_serie, date_arrivee, statut, capacite)
+                                   numero_serie, date_arrivee, statut, 0)
             elif type_app == "lave_vaisselle":
-                capacite = float(self.specifique_var.get())
                 appareil = LaveVaisselle(f"LV{len(self.master.gestionnaire.appareils['lave_vaisselle'])+1:03d}", marque, reference, 
-                                       numero_serie, date_arrivee, statut, capacite)
+                                       numero_serie, date_arrivee, statut, 0)
             elif type_app == "lave_linge_sechant":
-                capacite = float(self.specifique_var.get())
-                capacite_sechage = float(self.capacite_sechage_var.get())
                 appareil = LaveLingeSechant(f"LS{len(self.master.gestionnaire.appareils['lave_linge_sechant'])+1:03d}", marque, reference, 
-                                          numero_serie, date_arrivee, statut, capacite, capacite_sechage)
+                                          numero_serie, date_arrivee, statut, 0, 0)
             
             # Définir la localisation si elle est fournie
             if cellule and emplacement and position:
+                # Vérifier si l'emplacement est déjà occupé
+                if self.master.gestionnaire.emplacement_occupe(cellule, int(emplacement), position):
+                    messagebox.showerror("Erreur", "Cet emplacement est déjà occupé!")
+                    return
                 try:
                     appareil.set_localisation(cellule, int(emplacement), position)
                 except ValueError as e:
