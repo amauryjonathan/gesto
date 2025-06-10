@@ -157,11 +157,11 @@ class MainWindow(tk.Tk):
         appareil_id = self.appareil_var.get().split(" - ")[0]
         
         self.gestionnaire.ajouter_fiche_panne(
-            appareil_id,
-            self.symptome_var.get(),
-            self.cause_probable_var.get(),
-            self.notes_text.get(1.0, tk.END).strip(),
-            self.technicien_var.get()
+            appareil_id=appareil_id,
+            symptome=self.symptome_text.get(1.0, tk.END).strip(),
+            cause_probable=self.cause_probable_text.get(1.0, tk.END).strip(),
+            notes_techniques=self.notes_text.get(1.0, tk.END).strip(),
+            technicien=self.technicien_var.get()
         )
         
         # Mettre à jour le statut

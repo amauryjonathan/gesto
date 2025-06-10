@@ -1,0 +1,12 @@
+{
+    "F005": {
+        "appareil_id": "F005",
+        "date_creation": "2025-06-10 05:07:39",
+        "symptome": "la pompe est ne se vide pas",
+        "cause_probable": "un objet bloque la pompe\nle moteur de pompe ne marche plus",
+        "notes_techniques": "il faut remplacer la pompe et la durite",
+        "statut": "à réparer",
+        "date_resolution": null,
+        "technicien": "amaury"
+    }
+}

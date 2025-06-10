@@ -175,10 +175,9 @@ class GestionnaireAppareils:
         with open("app/data/fiches_panne.json", "w", encoding="utf-8") as f:
             json.dump(data, f, indent=4, ensure_ascii=False)
 
-    def ajouter_fiche_panne(self, appareil_id, symptome, type_panne, cause_probable, notes_techniques, technicien):
+    def ajouter_fiche_panne(self, appareil_id, symptome, cause_probable, notes_techniques, technicien):
         fiche = FichePanne(appareil_id, datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         fiche.symptome = symptome
-        fiche.type_panne = type_panne
         fiche.cause_probable = cause_probable
         fiche.notes_techniques = notes_techniques
         fiche.technicien = technicien
