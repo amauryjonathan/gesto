@@ -22,6 +22,17 @@ class VerificationPreVenteWindow(tk.Toplevel):
         if not self.verification:
             self.verification = self.parent.gestionnaire.ajouter_verification_pre_vente(appareil.identifiant)
         
+        # Charger le nombre de tentatives sauvegardé (si existant)
+        self.tentatives = self.verification.observations.get("tentatives", {
+            "Express": 0,
+            "Chauffe": 0,
+            "Rotation": 0
+        })
+        # S'assurer que toutes les clés existent
+        for prog in ["Express", "Chauffe", "Rotation"]:
+            if prog not in self.tentatives:
+                self.tentatives[prog] = 0
+        
         self.create_widgets()
         
     def create_widgets(self):
@@ -69,6 +80,7 @@ class VerificationPreVenteWindow(tk.Toplevel):
         self.rotation_var = tk.StringVar(value=self.verification.programme_rotation)
         
         # Frame pour chaque programme
+        self._prev_status = {"Express": "non_testé", "Chauffe": "non_testé", "Rotation": "non_testé"}
         for prog_name, prog_var in [("Express", self.express_var), 
                                   ("Chauffe", self.chauffe_var),
                                   ("Rotation", self.rotation_var)]:
@@ -80,9 +92,9 @@ class VerificationPreVenteWindow(tk.Toplevel):
                                values=["non_testé", "en_cours", "réussi", "échoué"],
                                state="readonly", width=15)
             combo.pack(side=tk.LEFT, padx=5)
+            combo.bind("<Button-1>", lambda e, p=prog_name: self.store_prev_status(p))
             combo.bind("<<ComboboxSelected>>", lambda e, p=prog_name: self.on_program_status_change(p))
             
-            # Bouton pour ajouter un problème
             ttk.Button(prog_subframe, text="Ajouter problème",
                       command=lambda p=prog_name: self.add_problem(p)).pack(side=tk.LEFT, padx=5)
         
@@ -92,6 +104,10 @@ class VerificationPreVenteWindow(tk.Toplevel):
         
         self.journal_text = tk.Text(journal_frame, height=10)
         self.journal_text.pack(fill=tk.BOTH, expand=True)
+        # Charger le journal sauvegardé
+        journal_saved = self.verification.observations.get("journal_problemes", "")
+        self.journal_text.delete("1.0", tk.END)
+        self.journal_text.insert("1.0", journal_saved)
         
         # Observations
         obs_frame = ttk.LabelFrame(main_frame, text="Observations", padding="5")
@@ -129,22 +145,26 @@ class VerificationPreVenteWindow(tk.Toplevel):
             self.timer_label.configure(text=f"Timer: {hours:02d}:{minutes:02d}:{seconds:02d}")
             self.after(1000, self.update_timer)
             
+    def store_prev_status(self, program_name):
+        self._prev_status[program_name] = self.get_program_var(program_name).get()
+            
     def on_program_status_change(self, program_name):
         new_status = self.get_program_var(program_name).get()
-        
-        # Si on met un programme en cours
+        prev_status = self._prev_status[program_name]
+        # Incrémenter la tentative si on passe de non_testé à en_cours
+        if prev_status == "non_testé" and new_status == "en_cours":
+            self.tentatives[program_name] += 1
+            self.journal_text.insert(tk.END, 
+                f"Tentative {self.tentatives[program_name]} du programme {program_name}\n")
+        # Arrêter le programme précédent s'il existe
         if new_status == "en_cours":
-            # Arrêter le programme précédent s'il existe
             if self.current_program and self.current_program != program_name:
                 self.get_program_var(self.current_program).set("non_testé")
-                # Ajouter une note dans le journal
                 self.journal_text.insert(tk.END, 
                     f"Programme {self.current_program} arrêté car {program_name} a été démarré\n")
-            
             self.current_program = program_name
             if not self.timer_running:
                 self.toggle_timer()  # Démarrer le timer si pas déjà en cours
-                
         # Si on arrête le programme en cours
         elif self.current_program == program_name and new_status != "en_cours":
             self.current_program = None
@@ -169,7 +189,7 @@ class VerificationPreVenteWindow(tk.Toplevel):
         dialog.title(f"Ajouter un problème - Programme {program_name}")
         dialog.geometry("400x300")
         
-        ttk.Label(dialog, text="Description du problème:").pack(pady=5)
+        ttk.Label(dialog, text=f"Description du problème (Tentative {self.tentatives[program_name]}):").pack(pady=5)
         problem_text = tk.Text(dialog, height=5)
         problem_text.pack(pady=5, padx=5, fill=tk.X)
         
@@ -182,9 +202,9 @@ class VerificationPreVenteWindow(tk.Toplevel):
                 seconds = int(elapsed % 60)
                 timestamp = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
                 
-                # Ajouter le problème au journal
+                # Ajouter le problème au journal avec le numéro de tentative
                 self.journal_text.insert(tk.END, 
-                    f"[{timestamp}] Programme {program_name}: {problem}\n")
+                    f"[{timestamp}] Programme {program_name} (Tentative {self.tentatives[program_name]}): {problem}\n")
                 
                 # Mettre à jour le statut du programme
                 self.get_program_var(program_name).set("échoué")
@@ -217,8 +237,9 @@ class VerificationPreVenteWindow(tk.Toplevel):
                 if key in self.verification.observations:
                     self.verification.observations[key] = value
         
-        # Ajouter le journal des problèmes aux observations
+        # Ajouter le journal des problèmes et les tentatives aux observations
         self.verification.observations["journal_problemes"] = self.journal_text.get("1.0", tk.END).strip()
+        self.verification.observations["tentatives"] = self.tentatives
         
         # Sauvegarde
         self.parent.gestionnaire.mettre_a_jour_verification_pre_vente(

@@ -13,4 +13,4 @@ if __name__ == "__main__":
         app.mainloop()
     except Exception as e:
         print('Erreur attrapée :')
-        traceback.print_exc() 
+        traceback.print_exc()           
