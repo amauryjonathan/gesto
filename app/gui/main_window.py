@@ -3,7 +3,7 @@ from tkinter import ttk, messagebox
 from datetime import datetime
 from app.gui.windows.ajout_window import AjoutWindow
 from app.gui.windows.technicien_detail_window import DetailWindow
-from app.gui.windows.verification_pre_vente_window import VerificationPreVenteWindow
+from app.gui.windows.test_window import TestWindow
 
 class MainWindow(tk.Tk):
     def __init__(self, gestionnaire):
@@ -71,14 +71,21 @@ class MainWindow(tk.Tk):
         # Remplir la liste
         self.refresh_liste()
         
+        self.tree.bind("<Double-1>", self.afficher_synthese_machine)
+        # Zone de synthèse
+        self.synthese_frame = ttk.LabelFrame(self.presentation_frame, text="Synthèse de la machine", padding=10)
+        self.synthese_frame.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+        self.synthese_text = tk.Text(self.synthese_frame, height=15)
+        self.synthese_text.pack(fill=tk.BOTH, expand=True)
+        
     def create_depannage_tab(self):
         # Frame principal
         frame = ttk.Frame(self.depannage_frame)
         frame.pack(fill=tk.BOTH, expand=True)
         
         # Bouton pour ouvrir la vérification pré-vente
-        ttk.Button(frame, text="Vérification pré-vente", 
-                   command=lambda: self.open_verification_pre_vente()).pack(pady=10)
+        ttk.Button(frame, text="Test", 
+                   command=lambda: self.open_test()).pack(pady=10)
         
         # Frame pour la sélection de l'appareil
         select_frame = ttk.LabelFrame(frame, text="Sélection de l'appareil", padding=10)
@@ -211,19 +218,32 @@ class MainWindow(tk.Tk):
     def ouvrir_ajout(self):
         AjoutWindow(self, self.refresh_liste)
 
-    def open_verification_pre_vente(self):
-        # Récupérer l'appareil sélectionné depuis la liste déroulante
+    def open_test(self):
         if not self.appareil_var.get():
             messagebox.showerror("Erreur", "Veuillez sélectionner un appareil dans la liste déroulante")
             return
-        
-        # Extraire l'ID de l'appareil depuis la sélection (format: "ID - Marque Référence")
         appareil_id = self.appareil_var.get().split(" - ")[0]
         appareil = self.gestionnaire.get_appareil_by_id(appareil_id)
-        
         if not appareil:
             messagebox.showerror("Erreur", "Appareil non trouvé")
             return
-        
-        # Ouvrir la fenêtre de vérification
-        VerificationPreVenteWindow(self, appareil) 
+        TestWindow(self, appareil)
+
+    def afficher_synthese_machine(self, event):
+        selection = self.tree.selection()
+        if not selection:
+            return
+        appareil_id = self.tree.item(selection[0])['values'][0]
+        appareil = self.gestionnaire.get_appareil_by_id(appareil_id)
+        fiche = self.gestionnaire.get_fiche_panne(appareil_id)
+        test = self.gestionnaire.get_test(appareil_id)
+        synthese = f"Identifiant : {appareil.identifiant}\nType : {type(appareil).__name__}\nMarque : {appareil.marque}\nRéférence : {appareil.reference}\nNuméro de série : {appareil.numero_serie}\nDate arrivée : {appareil.date_arrivee}\nStatut : {appareil.statut}\n"
+        if fiche:
+            synthese += f"\n--- Fiche de panne ---\nSymptôme : {fiche.symptome}\nCause probable : {fiche.cause_probable}\nNotes techniques : {fiche.notes_techniques}\nTechnicien : {fiche.technicien}\nStatut : {fiche.statut}\n"
+        if test:
+            synthese += f"\n--- Test ---\nVérifications visuelles :\n  Commande : {test.commande_ok}\n  Verrou porte : {test.verrou_porte_ok}\n  Rotation tambour : {test.rotation_tambour_ok}\n  Chauffe : {test.chauffe_ok}\n  Essorage : {test.essorage_ok}\n  Séchage : {test.sechage_ok}\nProgrammes :\n  Express : {test.programme_express}\n  Chauffe : {test.programme_chauffe}\n  Rotation : {test.programme_rotation}\nJournal des problèmes :\n{test.observations.get('journal_problemes', '')}\nObservations :\n"
+            for k, v in test.observations.items():
+                if k != 'journal_problemes' and k != 'tentatives':
+                    synthese += f"  {k} : {v}\n"
+        self.synthese_text.delete("1.0", tk.END)
+        self.synthese_text.insert("1.0", synthese) 
