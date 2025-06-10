@@ -85,31 +85,37 @@ class MainWindow(tk.Tk):
         form_frame = ttk.LabelFrame(self.depannage_frame, text="Fiche de panne", padding=10)
         form_frame.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
         
-        # Type de panne
-        ttk.Label(form_frame, text="Type de panne:").grid(row=0, column=0, sticky=tk.W, pady=5)
-        self.type_panne_var = tk.StringVar()
-        types_panne = ["Électrique", "Mécanique", "Électronique", "Hydraulique", "Autre"]
-        ttk.Combobox(form_frame, textvariable=self.type_panne_var, values=types_panne).grid(row=0, column=1, sticky=tk.W, pady=5)
+        # Symptôme
+        ttk.Label(form_frame, text="Symptôme:").grid(row=0, column=0, sticky=tk.W, pady=5)
+        self.symptome_var = tk.StringVar()
+        self.symptome_text = tk.Text(form_frame, height=3, width=40)
+        self.symptome_text.grid(row=0, column=1, sticky=tk.W, pady=5)
+        
+        # Cause probable
+        ttk.Label(form_frame, text="Cause probable:").grid(row=1, column=0, sticky=tk.W, pady=5)
+        self.cause_probable_var = tk.StringVar()
+        self.cause_probable_text = tk.Text(form_frame, height=3, width=40)
+        self.cause_probable_text.grid(row=1, column=1, sticky=tk.W, pady=5)
         
         # Notes techniques
-        ttk.Label(form_frame, text="Notes techniques:").grid(row=1, column=0, sticky=tk.W, pady=5)
+        ttk.Label(form_frame, text="Notes techniques:").grid(row=2, column=0, sticky=tk.W, pady=5)
         self.notes_text = tk.Text(form_frame, height=5, width=40)
-        self.notes_text.grid(row=1, column=1, sticky=tk.W, pady=5)
+        self.notes_text.grid(row=2, column=1, sticky=tk.W, pady=5)
         
         # Technicien
-        ttk.Label(form_frame, text="Technicien:").grid(row=2, column=0, sticky=tk.W, pady=5)
+        ttk.Label(form_frame, text="Technicien:").grid(row=3, column=0, sticky=tk.W, pady=5)
         self.technicien_var = tk.StringVar()
-        ttk.Entry(form_frame, textvariable=self.technicien_var).grid(row=2, column=1, sticky=tk.W, pady=5)
+        ttk.Entry(form_frame, textvariable=self.technicien_var).grid(row=3, column=1, sticky=tk.W, pady=5)
         
         # Statut
-        ttk.Label(form_frame, text="Statut:").grid(row=3, column=0, sticky=tk.W, pady=5)
+        ttk.Label(form_frame, text="Statut:").grid(row=4, column=0, sticky=tk.W, pady=5)
         self.statut_var = tk.StringVar(value="à réparer")
         statuts = ["à réparer", "diagnostiquer", "réparer"]
-        ttk.Combobox(form_frame, textvariable=self.statut_var, values=statuts).grid(row=3, column=1, sticky=tk.W, pady=5)
+        ttk.Combobox(form_frame, textvariable=self.statut_var, values=statuts).grid(row=4, column=1, sticky=tk.W, pady=5)
         
         # Boutons
         button_frame = ttk.Frame(form_frame)
-        button_frame.grid(row=4, column=0, columnspan=2, pady=20)
+        button_frame.grid(row=5, column=0, columnspan=2, pady=20)
         
         ttk.Button(button_frame, text="Enregistrer", command=self.save_fiche_panne).pack(side=tk.LEFT, padx=5)
         ttk.Button(button_frame, text="Effacer", command=self.clear_fiche_panne).pack(side=tk.LEFT, padx=5)
@@ -132,7 +138,10 @@ class MainWindow(tk.Tk):
         # Charger la fiche de panne existante ou créer une nouvelle
         fiche = self.gestionnaire.get_fiche_panne(appareil_id)
         if fiche:
-            self.type_panne_var.set(fiche.type_panne)
+            self.symptome_text.delete(1.0, tk.END)
+            self.symptome_text.insert(1.0, fiche.symptome)
+            self.cause_probable_text.delete(1.0, tk.END)
+            self.cause_probable_text.insert(1.0, fiche.cause_probable)
             self.notes_text.delete(1.0, tk.END)
             self.notes_text.insert(1.0, fiche.notes_techniques)
             self.technicien_var.set(fiche.technicien)
@@ -149,7 +158,8 @@ class MainWindow(tk.Tk):
         
         self.gestionnaire.ajouter_fiche_panne(
             appareil_id,
-            self.type_panne_var.get(),
+            self.symptome_var.get(),
+            self.cause_probable_var.get(),
             self.notes_text.get(1.0, tk.END).strip(),
             self.technicien_var.get()
         )
@@ -163,7 +173,8 @@ class MainWindow(tk.Tk):
         messagebox.showinfo("Succès", "Fiche de panne enregistrée avec succès!")
         
     def clear_fiche_panne(self):
-        self.type_panne_var.set("")
+        self.symptome_text.delete(1.0, tk.END)
+        self.cause_probable_text.delete(1.0, tk.END)
         self.notes_text.delete(1.0, tk.END)
         self.technicien_var.set("")
         self.statut_var.set("à réparer")
