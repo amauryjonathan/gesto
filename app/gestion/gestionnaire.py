@@ -8,6 +8,7 @@ from app.models.lave_linge import LaveLinge
 from app.models.lave_vaisselle import LaveVaisselle
 from app.models.lave_linge_sechant import LaveLingeSechant
 from app.models.fiche_panne import FichePanne
+from app.models.verification_pre_vente import VerificationPreVente
 from datetime import datetime
 
 class GestionnaireAppareils:
@@ -20,8 +21,10 @@ class GestionnaireAppareils:
             "lave_vaisselle": []
         }
         self.fiches_panne = {}  # Dictionnaire des fiches de panne par appareil_id
+        self.verifications_pre_vente = {}  # Dictionnaire des vérifications pré-vente par appareil_id
         self.charger_json()
         self.charger_fiches_panne()
+        self.charger_verifications_pre_vente()
 
     def charger_json(self):
         try:
@@ -221,3 +224,34 @@ class GestionnaireAppareils:
                     appareil.position == position):
                     return True
         return False 
+
+    def charger_verifications_pre_vente(self):
+        try:
+            with open("app/data/verifications_pre_vente.json", "r", encoding="utf-8") as f:
+                data = json.load(f)
+                for appareil_id, verification_data in data.items():
+                    self.verifications_pre_vente[appareil_id] = VerificationPreVente.from_dict(verification_data)
+        except FileNotFoundError:
+            pass
+
+    def sauvegarder_verifications_pre_vente(self):
+        data = {appareil_id: verification.to_dict() for appareil_id, verification in self.verifications_pre_vente.items()}
+        with open("app/data/verifications_pre_vente.json", "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=4, ensure_ascii=False)
+
+    def ajouter_verification_pre_vente(self, appareil_id):
+        if appareil_id not in self.verifications_pre_vente:
+            self.verifications_pre_vente[appareil_id] = VerificationPreVente(appareil_id)
+            self.sauvegarder_verifications_pre_vente()
+        return self.verifications_pre_vente[appareil_id]
+
+    def get_verification_pre_vente(self, appareil_id):
+        return self.verifications_pre_vente.get(appareil_id)
+
+    def mettre_a_jour_verification_pre_vente(self, appareil_id, **kwargs):
+        if appareil_id in self.verifications_pre_vente:
+            verification = self.verifications_pre_vente[appareil_id]
+            for key, value in kwargs.items():
+                if hasattr(verification, key):
+                    setattr(verification, key, value)
+            self.sauvegarder_verifications_pre_vente() 

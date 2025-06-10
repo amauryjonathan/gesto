@@ -1,0 +1,52 @@
+{
+    "F005": {
+        "appareil_id": "F005",
+        "date_verification": "2025-06-10 05:46:53",
+        "commande_ok": false,
+        "verrou_porte_ok": false,
+        "rotation_tambour_ok": false,
+        "chauffe_ok": false,
+        "essorage_ok": false,
+        "sechage_ok": false,
+        "programme_express": "non_testé",
+        "programme_chauffe": "non_testé",
+        "programme_rotation": "non_testé",
+        "observations": {
+            "commande": "",
+            "verrou_porte": "",
+            "rotation_tambour": "",
+            "chauffe": "",
+            "essorage": "",
+            "sechage": "",
+            "programme_express": "",
+            "programme_chauffe": "",
+            "programme_rotation": ""
+        },
+        "statut": "en_cours"
+    },
+    "F008": {
+        "appareil_id": "F008",
+        "date_verification": "2025-06-10 05:47:50",
+        "commande_ok": false,
+        "verrou_porte_ok": false,
+        "rotation_tambour_ok": false,
+        "chauffe_ok": false,
+        "essorage_ok": false,
+        "sechage_ok": false,
+        "programme_express": "non_testé",
+        "programme_chauffe": "non_testé",
+        "programme_rotation": "non_testé",
+        "observations": {
+            "commande": "",
+            "verrou_porte": "",
+            "rotation_tambour": "",
+            "chauffe": "",
+            "essorage": "",
+            "sechage": "",
+            "programme_express": "",
+            "programme_chauffe": "",
+            "programme_rotation": ""
+        },
+        "statut": "en_cours"
+    }
+}

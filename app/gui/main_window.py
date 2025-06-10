@@ -3,6 +3,7 @@ from tkinter import ttk, messagebox
 from datetime import datetime
 from app.gui.windows.ajout_window import AjoutWindow
 from app.gui.windows.technicien_detail_window import DetailWindow
+from app.gui.windows.verification_pre_vente_window import VerificationPreVenteWindow
 
 class MainWindow(tk.Tk):
     def __init__(self, gestionnaire):
@@ -71,8 +72,16 @@ class MainWindow(tk.Tk):
         self.refresh_liste()
         
     def create_depannage_tab(self):
+        # Frame principal
+        frame = ttk.Frame(self.depannage_frame)
+        frame.pack(fill=tk.BOTH, expand=True)
+        
+        # Bouton pour ouvrir la vérification pré-vente
+        ttk.Button(frame, text="Vérification pré-vente", 
+                   command=lambda: self.open_verification_pre_vente()).pack(pady=10)
+        
         # Frame pour la sélection de l'appareil
-        select_frame = ttk.LabelFrame(self.depannage_frame, text="Sélection de l'appareil", padding=10)
+        select_frame = ttk.LabelFrame(frame, text="Sélection de l'appareil", padding=10)
         select_frame.pack(fill=tk.X, padx=5, pady=5)
         
         # Liste déroulante pour sélectionner l'appareil
@@ -82,7 +91,7 @@ class MainWindow(tk.Tk):
         self.appareil_combo.bind("<<ComboboxSelected>>", self.on_appareil_selected)
         
         # Frame pour le formulaire de panne
-        form_frame = ttk.LabelFrame(self.depannage_frame, text="Fiche de panne", padding=10)
+        form_frame = ttk.LabelFrame(frame, text="Fiche de panne", padding=10)
         form_frame.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
         
         # Symptôme
@@ -200,4 +209,21 @@ class MainWindow(tk.Tk):
                 ))
                 
     def ouvrir_ajout(self):
-        AjoutWindow(self, self.refresh_liste) 
+        AjoutWindow(self, self.refresh_liste)
+
+    def open_verification_pre_vente(self):
+        # Récupérer l'appareil sélectionné depuis la liste déroulante
+        if not self.appareil_var.get():
+            messagebox.showerror("Erreur", "Veuillez sélectionner un appareil dans la liste déroulante")
+            return
+        
+        # Extraire l'ID de l'appareil depuis la sélection (format: "ID - Marque Référence")
+        appareil_id = self.appareil_var.get().split(" - ")[0]
+        appareil = self.gestionnaire.get_appareil_by_id(appareil_id)
+        
+        if not appareil:
+            messagebox.showerror("Erreur", "Appareil non trouvé")
+            return
+        
+        # Ouvrir la fenêtre de vérification
+        VerificationPreVenteWindow(self, appareil) 
