@@ -17,13 +17,13 @@ class TestWindow(tk.Toplevel):
         self.start_time = None
         self.current_program = None
         
-        # Créer ou récupérer la vérification existante
-        self.verification = self.parent.gestionnaire.get_verification_pre_vente(appareil.identifiant)
-        if not self.verification:
-            self.verification = self.parent.gestionnaire.ajouter_verification_pre_vente(appareil.identifiant)
+        # Créer ou récupérer le test existant
+        self.test = self.parent.gestionnaire.get_test(appareil.identifiant)
+        if not self.test:
+            self.test = self.parent.gestionnaire.ajouter_test(appareil.identifiant)
         
         # Charger le nombre de tentatives sauvegardé (si existant)
-        self.tentatives = self.verification.observations.get("tentatives", {
+        self.tentatives = self.test.observations.get("tentatives", {
             "Express": 0,
             "Chauffe": 0,
             "Rotation": 0
@@ -45,12 +45,12 @@ class TestWindow(tk.Toplevel):
         visu_frame.pack(fill=tk.X, pady=5)
         
         # Variables pour les cases à cocher
-        self.commande_var = tk.BooleanVar(value=self.verification.commande_ok)
-        self.verrou_var = tk.BooleanVar(value=self.verification.verrou_porte_ok)
-        self.rotation_var = tk.BooleanVar(value=self.verification.rotation_tambour_ok)
-        self.chauffe_var = tk.BooleanVar(value=self.verification.chauffe_ok)
-        self.essorage_var = tk.BooleanVar(value=self.verification.essorage_ok)
-        self.sechage_var = tk.BooleanVar(value=self.verification.sechage_ok)
+        self.commande_var = tk.BooleanVar(value=self.test.commande_ok)
+        self.verrou_var = tk.BooleanVar(value=self.test.verrou_porte_ok)
+        self.rotation_var = tk.BooleanVar(value=self.test.rotation_tambour_ok)
+        self.chauffe_var = tk.BooleanVar(value=self.test.chauffe_ok)
+        self.essorage_var = tk.BooleanVar(value=self.test.essorage_ok)
+        self.sechage_var = tk.BooleanVar(value=self.test.sechage_ok)
         
         # Cases à cocher
         ttk.Checkbutton(visu_frame, text="Commande (bandeau)", variable=self.commande_var).pack(anchor=tk.W, pady=2)
@@ -75,9 +75,9 @@ class TestWindow(tk.Toplevel):
         self.timer_button.pack(side=tk.LEFT, padx=5)
         
         # Variables pour les programmes
-        self.express_var = tk.StringVar(value=self.verification.programme_express)
-        self.chauffe_var = tk.StringVar(value=self.verification.programme_chauffe)
-        self.rotation_var = tk.StringVar(value=self.verification.programme_rotation)
+        self.express_var = tk.StringVar(value=self.test.programme_express)
+        self.chauffe_var = tk.StringVar(value=self.test.programme_chauffe)
+        self.rotation_var = tk.StringVar(value=self.test.programme_rotation)
         
         # Frame pour chaque programme
         self._prev_status = {"Express": "non_testé", "Chauffe": "non_testé", "Rotation": "non_testé"}
@@ -105,7 +105,7 @@ class TestWindow(tk.Toplevel):
         self.journal_text = tk.Text(journal_frame, height=10)
         self.journal_text.pack(fill=tk.BOTH, expand=True)
         # Charger le journal sauvegardé
-        journal_saved = self.verification.observations.get("journal_problemes", "")
+        journal_saved = self.test.observations.get("journal_problemes", "")
         self.journal_text.delete("1.0", tk.END)
         self.journal_text.insert("1.0", journal_saved)
         
@@ -115,7 +115,7 @@ class TestWindow(tk.Toplevel):
         
         self.observations_text = tk.Text(obs_frame, height=10)
         self.observations_text.pack(fill=tk.BOTH, expand=True)
-        self.observations_text.insert("1.0", "\n".join(f"{k}: {v}" for k, v in self.verification.observations.items()))
+        self.observations_text.insert("1.0", "\n".join(f"{k}: {v}" for k, v in self.test.observations.items()))
         
         # Boutons
         button_frame = ttk.Frame(main_frame)
@@ -215,17 +215,17 @@ class TestWindow(tk.Toplevel):
         
     def save_verification(self):
         # Mise à jour des vérifications visuelles
-        self.verification.commande_ok = self.commande_var.get()
-        self.verification.verrou_porte_ok = self.verrou_var.get()
-        self.verification.rotation_tambour_ok = self.rotation_var.get()
-        self.verification.chauffe_ok = self.chauffe_var.get()
-        self.verification.essorage_ok = self.essorage_var.get()
-        self.verification.sechage_ok = self.sechage_var.get()
+        self.test.commande_ok = self.commande_var.get()
+        self.test.verrou_porte_ok = self.verrou_var.get()
+        self.test.rotation_tambour_ok = self.rotation_var.get()
+        self.test.chauffe_ok = self.chauffe_var.get()
+        self.test.essorage_ok = self.essorage_var.get()
+        self.test.sechage_ok = self.sechage_var.get()
         
         # Mise à jour des programmes
-        self.verification.programme_express = self.express_var.get()
-        self.verification.programme_chauffe = self.chauffe_var.get()
-        self.verification.programme_rotation = self.rotation_var.get()
+        self.test.programme_express = self.express_var.get()
+        self.test.programme_chauffe = self.chauffe_var.get()
+        self.test.programme_rotation = self.rotation_var.get()
         
         # Mise à jour des observations
         observations_text = self.observations_text.get("1.0", tk.END).strip()
@@ -234,40 +234,40 @@ class TestWindow(tk.Toplevel):
                 key, value = line.split(":", 1)
                 key = key.strip()
                 value = value.strip()
-                if key in self.verification.observations:
-                    self.verification.observations[key] = value
+                if key in self.test.observations:
+                    self.test.observations[key] = value
         
         # Ajouter le journal des problèmes et les tentatives aux observations
-        self.verification.observations["journal_problemes"] = self.journal_text.get("1.0", tk.END).strip()
-        self.verification.observations["tentatives"] = self.tentatives
+        self.test.observations["journal_problemes"] = self.journal_text.get("1.0", tk.END).strip()
+        self.test.observations["tentatives"] = self.tentatives
         
         # Sauvegarde
-        self.parent.gestionnaire.mettre_a_jour_verification_pre_vente(
+        self.parent.gestionnaire.mettre_a_jour_test(
             self.appareil.identifiant,
-            commande_ok=self.verification.commande_ok,
-            verrou_porte_ok=self.verification.verrou_porte_ok,
-            rotation_tambour_ok=self.verification.rotation_tambour_ok,
-            chauffe_ok=self.verification.chauffe_ok,
-            essorage_ok=self.verification.essorage_ok,
-            sechage_ok=self.verification.sechage_ok,
-            programme_express=self.verification.programme_express,
-            programme_chauffe=self.verification.programme_chauffe,
-            programme_rotation=self.verification.programme_rotation,
-            observations=self.verification.observations
+            commande_ok=self.test.commande_ok,
+            verrou_porte_ok=self.test.verrou_porte_ok,
+            rotation_tambour_ok=self.test.rotation_tambour_ok,
+            chauffe_ok=self.test.chauffe_ok,
+            essorage_ok=self.test.essorage_ok,
+            sechage_ok=self.test.sechage_ok,
+            programme_express=self.test.programme_express,
+            programme_chauffe=self.test.programme_chauffe,
+            programme_rotation=self.test.programme_rotation,
+            observations=self.test.observations
         )
         
-        messagebox.showinfo("Succès", "Vérifications enregistrées avec succès!")
+        messagebox.showinfo("Succès", "Tests enregistrés avec succès!")
         
     def validate_verification(self):
-        if not self.verification.est_complete():
+        if not self.test.est_complete():
             messagebox.showerror("Erreur", "Toutes les vérifications doivent être effectuées et réussies!")
             return
             
-        self.verification.statut = "validé"
-        self.parent.gestionnaire.mettre_a_jour_verification_pre_vente(
+        self.test.statut = "validé"
+        self.parent.gestionnaire.mettre_a_jour_test(
             self.appareil.identifiant,
             statut="validé"
         )
         
-        messagebox.showinfo("Succès", "Vérifications validées avec succès!")
+        messagebox.showinfo("Succès", "Tests validés avec succès!")
         self.destroy() 

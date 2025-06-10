@@ -1,0 +1,27 @@
+{
+    "F006": {
+        "appareil_id": "F006",
+        "date_verification": "2025-06-10 21:56:30",
+        "commande_ok": false,
+        "verrou_porte_ok": false,
+        "rotation_tambour_ok": false,
+        "chauffe_ok": false,
+        "essorage_ok": false,
+        "sechage_ok": false,
+        "programme_express": "non_testé",
+        "programme_chauffe": "non_testé",
+        "programme_rotation": "non_testé",
+        "observations": {
+            "commande": "",
+            "verrou_porte": "",
+            "rotation_tambour": "",
+            "chauffe": "",
+            "essorage": "",
+            "sechage": "",
+            "programme_express": "",
+            "programme_chauffe": "",
+            "programme_rotation": ""
+        },
+        "statut": "en_cours"
+    }
+}
