@@ -60,37 +60,6 @@
         "date_verification": "2025-06-11 08:02:47",
         "commande_ok": false,
         "verrou_porte_ok": false,
-        "rotation_tambour_ok": "réussi",
-        "chauffe_ok": "non_testé",
-        "essorage_ok": false,
-        "sechage_ok": false,
-        "programme_express": "échoué",
-        "programme_chauffe": "non_testé",
-        "programme_rotation": "réussi",
-        "observations": {
-            "commande": "",
-            "verrou_porte": "",
-            "rotation_tambour": "",
-            "chauffe": "",
-            "essorage": "",
-            "sechage": "",
-            "programme_express": "",
-            "programme_chauffe": "",
-            "programme_rotation": "",
-            "journal_problemes": "[00:00:07] Programme Express (Tentative 0): djtfdyujtjuè",
-            "tentatives": {
-                "Express": 0,
-                "Chauffe": 0,
-                "Rotation": 0
-            }
-        },
-        "statut": "en_cours"
-    },
-    "F008": {
-        "appareil_id": "F008",
-        "date_verification": "2025-06-11 08:13:57",
-        "commande_ok": false,
-        "verrou_porte_ok": false,
         "rotation_tambour_ok": false,
         "chauffe_ok": false,
         "essorage_ok": false,

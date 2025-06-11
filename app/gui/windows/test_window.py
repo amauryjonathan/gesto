@@ -80,7 +80,12 @@ class TestWindow(tk.Toplevel):
         self.rotation_var = tk.StringVar(value=self.test.programme_rotation)
         
         # Frame pour chaque programme
-        self._prev_status = {"Express": "non_testé", "Chauffe": "non_testé", "Rotation": "non_testé"}
+        self._prev_status = {
+            "Express": self.test.programme_express,
+            "Chauffe": self.test.programme_chauffe,
+            "Rotation": self.test.programme_rotation
+        }
+        
         for prog_name, prog_var in [("Express", self.express_var), 
                                   ("Chauffe", self.chauffe_var),
                                   ("Rotation", self.rotation_var)]:
@@ -115,7 +120,13 @@ class TestWindow(tk.Toplevel):
         
         self.observations_text = tk.Text(obs_frame, height=10)
         self.observations_text.pack(fill=tk.BOTH, expand=True)
-        self.observations_text.insert("1.0", "\n".join(f"{k}: {v}" for k, v in self.test.observations.items()))
+        
+        # Charger les observations en excluant journal_problemes et tentatives
+        observations = {k: v for k, v in self.test.observations.items() 
+                       if k not in ["journal_problemes", "tentatives"] and v}  # Ajout de 'and v' pour ne garder que les observations non vides
+        self.observations_text.delete("1.0", tk.END)
+        if observations:  # Si il y a des observations
+            self.observations_text.insert("1.0", "\n".join(f"{k}: {v}" for k, v in observations.items()))
         
         # Boutons
         button_frame = ttk.Frame(main_frame)

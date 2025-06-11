@@ -4,16 +4,20 @@ from datetime import datetime
 from app.gui.windows.ajout_window import AjoutWindow
 from app.gui.windows.technicien_detail_window import DetailWindow
 from app.gui.windows.test_window import TestWindow
+import os
 
 class MainWindow(tk.Tk):
     def __init__(self, gestionnaire):
         super().__init__()
         self.gestionnaire = gestionnaire
         
-        self.title("Gestion des appareils")
+        self.title("GESTO - Gestion des appareils électroménagers")
         self.geometry("1200x800")
         
         self.create_widgets()
+        
+        # Démarrer la sauvegarde automatique (toutes les 5 minutes)
+        self.after(300000, self.sauvegarde_automatique)
         
     def create_widgets(self):
         # Création du notebook (onglets)
@@ -29,6 +33,8 @@ class MainWindow(tk.Tk):
         self.depannage_frame = ttk.Frame(self.notebook)
         self.notebook.add(self.depannage_frame, text="Dépannage")
         self.create_depannage_tab()
+        
+        self.create_menu()
         
     def create_presentation_tab(self):
         # Frame pour la liste des appareils
@@ -246,4 +252,87 @@ class MainWindow(tk.Tk):
                 if k != 'journal_problemes' and k != 'tentatives':
                     synthese += f"  {k} : {v}\n"
         self.synthese_text.delete("1.0", tk.END)
-        self.synthese_text.insert("1.0", synthese) 
+        self.synthese_text.insert("1.0", synthese)
+
+    def create_menu(self):
+        menubar = tk.Menu(self)
+        self.config(menu=menubar)
+        
+        # Menu Fichier
+        file_menu = tk.Menu(menubar, tearoff=0)
+        menubar.add_cascade(label="Fichier", menu=file_menu)
+        file_menu.add_command(label="Quitter", command=self.quit)
+        
+        # Menu Sauvegardes
+        backup_menu = tk.Menu(menubar, tearoff=0)
+        menubar.add_cascade(label="Sauvegardes", menu=backup_menu)
+        backup_menu.add_command(label="Liste des sauvegardes", command=self.afficher_sauvegardes)
+        backup_menu.add_command(label="Sauvegarder maintenant", command=self.sauvegarder_maintenant)
+        
+    def afficher_sauvegardes(self):
+        """Affiche la fenêtre de gestion des sauvegardes"""
+        backup_window = tk.Toplevel(self)
+        backup_window.title("Gestion des sauvegardes")
+        backup_window.geometry("600x400")
+        
+        # Liste des sauvegardes
+        frame = ttk.Frame(backup_window, padding="10")
+        frame.pack(fill=tk.BOTH, expand=True)
+        
+        ttk.Label(frame, text="Sauvegardes disponibles:").pack(anchor=tk.W)
+        
+        # Créer un Treeview pour afficher les sauvegardes
+        columns = ("Date", "Heure", "Fichier")
+        tree = ttk.Treeview(frame, columns=columns, show="headings")
+        
+        # Définir les en-têtes
+        for col in columns:
+            tree.heading(col, text=col)
+            tree.column(col, width=150)
+        
+        # Ajouter les sauvegardes
+        for backup_file in self.gestionnaire.get_liste_backups():
+            filename = os.path.basename(backup_file)
+            # Extraire la date et l'heure du nom de fichier
+            date_str = filename[6:14]  # YYYYMMDD
+            time_str = filename[15:21]  # HHMMSS
+            date = f"{date_str[:4]}-{date_str[4:6]}-{date_str[6:]}"
+            time = f"{time_str[:2]}:{time_str[2:4]}:{time_str[4:]}"
+            
+            tree.insert("", tk.END, values=(date, time, filename))
+        
+        tree.pack(fill=tk.BOTH, expand=True, pady=5)
+        
+        # Boutons
+        button_frame = ttk.Frame(frame)
+        button_frame.pack(fill=tk.X, pady=10)
+        
+        def restaurer_selection():
+            selection = tree.selection()
+            if not selection:
+                messagebox.showwarning("Attention", "Veuillez sélectionner une sauvegarde à restaurer")
+                return
+                
+            if messagebox.askyesno("Confirmation", 
+                "Êtes-vous sûr de vouloir restaurer cette sauvegarde ?\nLes données actuelles seront remplacées."):
+                backup_file = os.path.join("app", "data", "backups", tree.item(selection[0])["values"][2])
+                if self.gestionnaire.restaurer_backup(backup_file):
+                    messagebox.showinfo("Succès", "Sauvegarde restaurée avec succès")
+                    self.refresh_liste()  # Rafraîchir l'affichage
+                    backup_window.destroy()
+                else:
+                    messagebox.showerror("Erreur", "Erreur lors de la restauration")
+        
+        ttk.Button(button_frame, text="Restaurer", command=restaurer_selection).pack(side=tk.LEFT, padx=5)
+        ttk.Button(button_frame, text="Fermer", command=backup_window.destroy).pack(side=tk.RIGHT, padx=5)
+        
+    def sauvegarder_maintenant(self):
+        """Force une sauvegarde immédiate"""
+        self.gestionnaire.sauvegarder_tests()
+        messagebox.showinfo("Succès", "Sauvegarde effectuée avec succès")
+
+    def sauvegarde_automatique(self):
+        """Effectue une sauvegarde automatique et programme la prochaine"""
+        self.gestionnaire.sauvegarder_tests()
+        # Programmer la prochaine sauvegarde
+        self.after(300000, self.sauvegarde_automatique) 

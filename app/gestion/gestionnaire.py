@@ -236,8 +236,56 @@ class GestionnaireAppareils:
 
     def sauvegarder_tests(self):
         data = {appareil_id: test.to_dict() for appareil_id, test in self.tests.items()}
+        
+        # Créer le dossier backups s'il n'existe pas
+        backup_dir = os.path.join("app", "data", "backups")
+        os.makedirs(backup_dir, exist_ok=True)
+        
+        # Sauvegarder le fichier principal
         with open("app/data/tests.json", "w", encoding="utf-8") as f:
             json.dump(data, f, indent=4, ensure_ascii=False)
+            
+        # Créer une copie de backup avec timestamp
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        backup_file = os.path.join(backup_dir, f"tests_{timestamp}.json")
+        with open(backup_file, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=4, ensure_ascii=False)
+            
+        # Garder seulement les 5 dernières sauvegardes
+        self._nettoyer_anciens_backups(backup_dir)
+        
+    def _nettoyer_anciens_backups(self, backup_dir):
+        """Supprime les anciennes sauvegardes en ne gardant que les 5 plus récentes"""
+        backup_files = [f for f in os.listdir(backup_dir) if f.startswith("tests_") and f.endswith(".json")]
+        backup_files.sort(reverse=True)  # Plus récent en premier
+        
+        # Supprimer les anciennes sauvegardes
+        for old_file in backup_files[5:]:
+            os.remove(os.path.join(backup_dir, old_file))
+            
+    def restaurer_backup(self, backup_file):
+        """Restaure une sauvegarde spécifique"""
+        try:
+            with open(backup_file, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                self.tests.clear()
+                for appareil_id, test_data in data.items():
+                    self.tests[appareil_id] = Test.from_dict(test_data)
+                self.sauvegarder_tests()  # Sauvegarde dans le fichier principal
+                return True
+        except Exception as e:
+            print(f"Erreur lors de la restauration: {e}")
+            return False
+            
+    def get_liste_backups(self):
+        """Retourne la liste des sauvegardes disponibles"""
+        backup_dir = os.path.join("app", "data", "backups")
+        if not os.path.exists(backup_dir):
+            return []
+            
+        backup_files = [f for f in os.listdir(backup_dir) if f.startswith("tests_") and f.endswith(".json")]
+        backup_files.sort(reverse=True)  # Plus récent en premier
+        return [os.path.join(backup_dir, f) for f in backup_files]
 
     def ajouter_test(self, appareil_id):
         if appareil_id not in self.tests:
