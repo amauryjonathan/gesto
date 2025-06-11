@@ -9,241 +9,82 @@ class MainWindow(tk.Tk):
     def __init__(self, gestionnaire):
         super().__init__()
         self.gestionnaire = gestionnaire
-        
-        self.title("Gestion des appareils")
         self.geometry("1200x800")
-        
+        self.title("Gesto - Dashboard")
+        self.selected_appareil_id = None
         self.create_widgets()
-        
+
     def create_widgets(self):
-        # Création du notebook (onglets)
-        self.notebook = ttk.Notebook(self)
-        self.notebook.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
-        
-        # Onglet Présentation
-        self.presentation_frame = ttk.Frame(self.notebook)
-        self.notebook.add(self.presentation_frame, text="Présentation")
-        self.create_presentation_tab()
-        
-        # Onglet Dépannage
-        self.depannage_frame = ttk.Frame(self.notebook)
-        self.notebook.add(self.depannage_frame, text="Dépannage")
-        self.create_depannage_tab()
-        
-    def create_presentation_tab(self):
-        # Frame pour la liste des appareils
-        list_frame = ttk.Frame(self.presentation_frame)
-        list_frame.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
-        
-        # Liste des appareils
-        self.tree = ttk.Treeview(list_frame, columns=("identifiant", "type", "marque", "reference", "numero_serie", "date_arrivee", "statut", "localisation"), show="headings")
-        
-        # Configuration des colonnes
-        self.tree.heading("identifiant", text="Identifiant")
-        self.tree.heading("type", text="Type")
-        self.tree.heading("marque", text="Marque")
-        self.tree.heading("reference", text="Référence")
-        self.tree.heading("numero_serie", text="Numéro de série")
-        self.tree.heading("date_arrivee", text="Date d'arrivée")
-        self.tree.heading("statut", text="Statut")
-        self.tree.heading("localisation", text="Localisation")
-        
-        self.tree.column("identifiant", width=100)
-        self.tree.column("type", width=100)
-        self.tree.column("marque", width=100)
-        self.tree.column("reference", width=100)
-        self.tree.column("numero_serie", width=150)
-        self.tree.column("date_arrivee", width=100)
-        self.tree.column("statut", width=100)
-        self.tree.column("localisation", width=100)
-        
-        # Scrollbar
-        scrollbar = ttk.Scrollbar(list_frame, orient=tk.VERTICAL, command=self.tree.yview)
-        self.tree.configure(yscrollcommand=scrollbar.set)
-        
-        # Placement des widgets
-        self.tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-        
-        # Bouton d'ajout
-        ttk.Button(self.presentation_frame, text="Ajouter un appareil", command=self.ouvrir_ajout).pack(pady=5)
-        
-        # Remplir la liste
-        self.refresh_liste()
-        
-        self.tree.bind("<Double-1>", self.afficher_synthese_machine)
-        # Zone de synthèse
-        self.synthese_frame = ttk.LabelFrame(self.presentation_frame, text="Synthèse de la machine", padding=10)
-        self.synthese_frame.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
-        self.synthese_text = tk.Text(self.synthese_frame, height=15)
-        self.synthese_text.pack(fill=tk.BOTH, expand=True)
-        
-    def create_depannage_tab(self):
-        # Frame principal
-        frame = ttk.Frame(self.depannage_frame)
-        frame.pack(fill=tk.BOTH, expand=True)
-        
-        # Bouton pour ouvrir la vérification pré-vente
-        ttk.Button(frame, text="Test", 
-                   command=lambda: self.open_test()).pack(pady=10)
-        
-        # Frame pour la sélection de l'appareil
-        select_frame = ttk.LabelFrame(frame, text="Sélection de l'appareil", padding=10)
-        select_frame.pack(fill=tk.X, padx=5, pady=5)
-        
-        # Liste déroulante pour sélectionner l'appareil
-        self.appareil_var = tk.StringVar()
-        self.appareil_combo = ttk.Combobox(select_frame, textvariable=self.appareil_var)
-        self.appareil_combo.pack(fill=tk.X, pady=5)
-        self.appareil_combo.bind("<<ComboboxSelected>>", self.on_appareil_selected)
-        
-        # Frame pour le formulaire de panne
-        form_frame = ttk.LabelFrame(frame, text="Fiche de panne", padding=10)
-        form_frame.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
-        
-        # Symptôme
-        ttk.Label(form_frame, text="Symptôme:").grid(row=0, column=0, sticky=tk.W, pady=5)
-        self.symptome_var = tk.StringVar()
-        self.symptome_text = tk.Text(form_frame, height=3, width=40)
-        self.symptome_text.grid(row=0, column=1, sticky=tk.W, pady=5)
-        
-        # Cause probable
-        ttk.Label(form_frame, text="Cause probable:").grid(row=1, column=0, sticky=tk.W, pady=5)
-        self.cause_probable_var = tk.StringVar()
-        self.cause_probable_text = tk.Text(form_frame, height=3, width=40)
-        self.cause_probable_text.grid(row=1, column=1, sticky=tk.W, pady=5)
-        
-        # Notes techniques
-        ttk.Label(form_frame, text="Notes techniques:").grid(row=2, column=0, sticky=tk.W, pady=5)
-        self.notes_text = tk.Text(form_frame, height=5, width=40)
-        self.notes_text.grid(row=2, column=1, sticky=tk.W, pady=5)
-        
-        # Technicien
-        ttk.Label(form_frame, text="Technicien:").grid(row=3, column=0, sticky=tk.W, pady=5)
-        self.technicien_var = tk.StringVar()
-        ttk.Entry(form_frame, textvariable=self.technicien_var).grid(row=3, column=1, sticky=tk.W, pady=5)
-        
-        # Statut
-        ttk.Label(form_frame, text="Statut:").grid(row=4, column=0, sticky=tk.W, pady=5)
-        self.statut_var = tk.StringVar(value="à réparer")
-        statuts = ["à réparer", "diagnostiquer", "réparer"]
-        ttk.Combobox(form_frame, textvariable=self.statut_var, values=statuts).grid(row=4, column=1, sticky=tk.W, pady=5)
-        
-        # Boutons
-        button_frame = ttk.Frame(form_frame)
-        button_frame.grid(row=5, column=0, columnspan=2, pady=20)
-        
-        ttk.Button(button_frame, text="Enregistrer", command=self.save_fiche_panne).pack(side=tk.LEFT, padx=5)
-        ttk.Button(button_frame, text="Effacer", command=self.clear_fiche_panne).pack(side=tk.LEFT, padx=5)
-        
-        # Mettre à jour la liste des appareils
-        self.update_appareil_list()
-        
-    def update_appareil_list(self):
-        appareils = []
-        for type_app, liste in self.gestionnaire.appareils.items():
-            for appareil in liste:
-                appareils.append(f"{appareil.identifiant} - {appareil.marque} {appareil.reference}")
-        self.appareil_combo['values'] = appareils
-        
-    def on_appareil_selected(self, event):
-        # Récupérer l'identifiant de l'appareil sélectionné
-        selection = self.appareil_var.get()
-        appareil_id = selection.split(" - ")[0]
-        
-        # Charger la fiche de panne existante ou créer une nouvelle
-        fiche = self.gestionnaire.get_fiche_panne(appareil_id)
-        if fiche:
-            self.symptome_text.delete(1.0, tk.END)
-            self.symptome_text.insert(1.0, fiche.symptome)
-            self.cause_probable_text.delete(1.0, tk.END)
-            self.cause_probable_text.insert(1.0, fiche.cause_probable)
-            self.notes_text.delete(1.0, tk.END)
-            self.notes_text.insert(1.0, fiche.notes_techniques)
-            self.technicien_var.set(fiche.technicien)
-            self.statut_var.set(fiche.statut)
-        else:
-            self.clear_fiche_panne()
-            
-    def save_fiche_panne(self):
-        if not self.appareil_var.get():
-            messagebox.showerror("Erreur", "Veuillez sélectionner un appareil")
-            return
-            
-        appareil_id = self.appareil_var.get().split(" - ")[0]
-        
-        self.gestionnaire.ajouter_fiche_panne(
-            appareil_id=appareil_id,
-            symptome=self.symptome_text.get(1.0, tk.END).strip(),
-            cause_probable=self.cause_probable_text.get(1.0, tk.END).strip(),
-            notes_techniques=self.notes_text.get(1.0, tk.END).strip(),
-            technicien=self.technicien_var.get()
-        )
-        
-        # Mettre à jour le statut
-        self.gestionnaire.mettre_a_jour_fiche_panne(
-            appareil_id,
-            statut=self.statut_var.get()
-        )
-        
-        messagebox.showinfo("Succès", "Fiche de panne enregistrée avec succès!")
-        
-    def clear_fiche_panne(self):
-        self.symptome_text.delete(1.0, tk.END)
-        self.cause_probable_text.delete(1.0, tk.END)
-        self.notes_text.delete(1.0, tk.END)
-        self.technicien_var.set("")
-        self.statut_var.set("à réparer")
-        
+        # Barre latérale
+        sidebar = ttk.Frame(self)
+        sidebar.pack(side="left", fill="y")
+        self.section_var = tk.StringVar(value="Présentation")
+        sections = ["Présentation", "Dépannage", "Tests", "Paramètres"]
+        for section in sections:
+            btn = ttk.Button(sidebar, text=section, width=20,
+                            command=lambda s=section: self.show_section(s))
+            btn.pack(pady=10, padx=10)
+
+        # Barre supérieure
+        topbar = ttk.Frame(self)
+        topbar.pack(side="top", fill="x")
+        ttk.Label(topbar, text="GESTO", font=("Arial", 18)).pack(side="left", padx=20, pady=10)
+        ttk.Entry(topbar, width=40).pack(side="left", padx=20)
+        ttk.Button(topbar, text="Ajouter un appareil", command=self.ouvrir_ajout).pack(side="right", padx=20)
+
+        # Zone principale
+        self.main = ttk.Frame(self)
+        self.main.pack(side="left", fill="both", expand=True, padx=20, pady=20)
+        self.show_section("Présentation")
+
+    def show_section(self, section):
+        for widget in self.main.winfo_children():
+            widget.destroy()
+        if section == "Présentation":
+            ttk.Label(self.main, text="Liste des appareils", font=("Arial", 16)).pack(pady=10)
+            columns = ("identifiant", "type", "marque", "reference", "numero_serie", "date_arrivee", "statut")
+            self.tree = ttk.Treeview(self.main, columns=columns, show="headings", height=15)
+            for col in columns:
+                self.tree.heading(col, text=col.capitalize())
+                self.tree.column(col, width=120)
+            self.tree.pack(fill=tk.BOTH, expand=True)
+            self.tree.bind("<<TreeviewSelect>>", self.on_tree_select)
+            self.refresh_liste()
+        elif section == "Dépannage":
+            ttk.Label(self.main, text="Section Dépannage", font=("Arial", 16)).pack(pady=10)
+            ttk.Button(self.main, text="Ouvrir Test pour l'appareil sélectionné", command=self.open_test).pack(pady=20)
+        elif section == "Tests":
+            ttk.Label(self.main, text="Section Tests", font=("Arial", 16)).pack(pady=20)
+        elif section == "Paramètres":
+            ttk.Label(self.main, text="Paramètres de l'application", font=("Arial", 16)).pack(pady=20)
+
     def refresh_liste(self):
-        # Effacer la liste
-        for item in self.tree.get_children():
-            self.tree.delete(item)
-            
-        # Remplir la liste
-        for type_app, appareils in self.gestionnaire.appareils.items():
-            for appareil in appareils:
-                localisation = f"{appareil.cellule}{appareil.emplacement}{appareil.position}" if appareil.cellule and appareil.emplacement and appareil.position else ""
-                self.tree.insert("", tk.END, values=(
-                    appareil.identifiant,
-                    type_app.replace("_", " ").title(),
-                    appareil.marque,
-                    appareil.reference,
-                    appareil.numero_serie,
-                    appareil.date_arrivee,
-                    appareil.statut,
-                    localisation
-                ))
-                
+        if hasattr(self, 'tree'):
+            for item in self.tree.get_children():
+                self.tree.delete(item)
+            for type_app, appareils in self.gestionnaire.appareils.items():
+                for appareil in appareils:
+                    self.tree.insert("", tk.END, values=(
+                        appareil.identifiant,
+                        type_app.replace("_", " ").title(),
+                        appareil.marque,
+                        appareil.reference,
+                        appareil.numero_serie,
+                        appareil.date_arrivee,
+                        appareil.statut
+                    ))
+
+    def on_tree_select(self, event):
+        selection = self.tree.selection()
+        if selection:
+            item = self.tree.item(selection[0])
+            self.selected_appareil_id = item['values'][0]
+
     def ouvrir_ajout(self):
         AjoutWindow(self, self.refresh_liste)
 
     def open_test(self):
-        if not self.appareil_var.get():
-            messagebox.showerror("Erreur", "Veuillez sélectionner un appareil dans la liste déroulante")
-            return
-        appareil_id = self.appareil_var.get().split(" - ")[0]
-        appareil = self.gestionnaire.get_appareil_by_id(appareil_id)
-        if not appareil:
-            messagebox.showerror("Erreur", "Appareil non trouvé")
-            return
-        TestWindow(self, appareil)
-
-    def afficher_synthese_machine(self, event):
-        selection = self.tree.selection()
-        if not selection:
-            return
-        appareil_id = self.tree.item(selection[0])['values'][0]
-        appareil = self.gestionnaire.get_appareil_by_id(appareil_id)
-        fiche = self.gestionnaire.get_fiche_panne(appareil_id)
-        test = self.gestionnaire.get_test(appareil_id)
-        synthese = f"Identifiant : {appareil.identifiant}\nType : {type(appareil).__name__}\nMarque : {appareil.marque}\nRéférence : {appareil.reference}\nNuméro de série : {appareil.numero_serie}\nDate arrivée : {appareil.date_arrivee}\nStatut : {appareil.statut}\n"
-        if fiche:
-            synthese += f"\n--- Fiche de panne ---\nSymptôme : {fiche.symptome}\nCause probable : {fiche.cause_probable}\nNotes techniques : {fiche.notes_techniques}\nTechnicien : {fiche.technicien}\nStatut : {fiche.statut}\n"
-        if test:
-            synthese += f"\n--- Test ---\nVérifications visuelles :\n  Commande : {test.commande_ok}\n  Verrou porte : {test.verrou_porte_ok}\n  Rotation tambour : {test.rotation_tambour_ok}\n  Chauffe : {test.chauffe_ok}\n  Essorage : {test.essorage_ok}\n  Séchage : {test.sechage_ok}\nProgrammes :\n  Express : {test.programme_express}\n  Chauffe : {test.programme_chauffe}\n  Rotation : {test.programme_rotation}\nJournal des problèmes :\n{test.observations.get('journal_problemes', '')}\nObservations :\n"
-            for k, v in test.observations.items():
-                if k != 'journal_problemes' and k != 'tentatives':
-                    synthese += f"  {k} : {v}\n"
-        self.synthese_text.delete("1.0", tk.END)
-        self.synthese_text.insert("1.0", synthese) 
+        if self.selected_appareil_id:
+            TestWindow(self, self.selected_appareil_id)
+        else:
+            messagebox.showwarning("Attention", "Veuillez sélectionner un appareil") 
