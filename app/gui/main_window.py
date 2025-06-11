@@ -9,11 +9,18 @@ import os
 class MainWindow(tk.Tk):
     def __init__(self, gestionnaire):
         super().__init__()
-        self.gestionnaire = gestionnaire
         
-        self.title("GESTO - Gestion des appareils électroménagers")
+        self.title("GESTO - Gestion des Tests")
         self.geometry("1200x800")
         
+        # Dictionnaire pour suivre les fenêtres de test ouvertes
+        self.test_windows = {}
+        
+        # Initialisation du gestionnaire
+        self.gestionnaire = gestionnaire
+        
+        # Création des widgets
+        self.create_menu()
         self.create_widgets()
         
         # Démarrer la sauvegarde automatique (toutes les 5 minutes)
@@ -33,8 +40,6 @@ class MainWindow(tk.Tk):
         self.depannage_frame = ttk.Frame(self.notebook)
         self.notebook.add(self.depannage_frame, text="Dépannage")
         self.create_depannage_tab()
-        
-        self.create_menu()
         
     def create_presentation_tab(self):
         # Frame pour la liste des appareils
@@ -91,7 +96,7 @@ class MainWindow(tk.Tk):
         
         # Bouton pour ouvrir la vérification pré-vente
         ttk.Button(frame, text="Test", 
-                   command=lambda: self.open_test()).pack(pady=10)
+                   command=self.open_test).pack(pady=10)
         
         # Frame pour la sélection de l'appareil
         select_frame = ttk.LabelFrame(frame, text="Sélection de l'appareil", padding=10)
@@ -103,19 +108,21 @@ class MainWindow(tk.Tk):
         self.appareil_combo.pack(fill=tk.X, pady=5)
         self.appareil_combo.bind("<<ComboboxSelected>>", self.on_appareil_selected)
         
-        # Frame pour le formulaire de panne
-        form_frame = ttk.LabelFrame(frame, text="Fiche de panne", padding=10)
-        form_frame.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+        # Frame pour les deux sections côte à côte
+        sections_frame = ttk.Frame(frame)
+        sections_frame.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+        
+        # Frame pour le formulaire de panne (à gauche)
+        form_frame = ttk.LabelFrame(sections_frame, text="Fiche de panne", padding=10)
+        form_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(0, 5))
         
         # Symptôme
         ttk.Label(form_frame, text="Symptôme:").grid(row=0, column=0, sticky=tk.W, pady=5)
-        self.symptome_var = tk.StringVar()
         self.symptome_text = tk.Text(form_frame, height=3, width=40)
         self.symptome_text.grid(row=0, column=1, sticky=tk.W, pady=5)
         
         # Cause probable
         ttk.Label(form_frame, text="Cause probable:").grid(row=1, column=0, sticky=tk.W, pady=5)
-        self.cause_probable_var = tk.StringVar()
         self.cause_probable_text = tk.Text(form_frame, height=3, width=40)
         self.cause_probable_text.grid(row=1, column=1, sticky=tk.W, pady=5)
         
@@ -135,12 +142,20 @@ class MainWindow(tk.Tk):
         statuts = ["à réparer", "diagnostiquer", "réparer"]
         ttk.Combobox(form_frame, textvariable=self.statut_var, values=statuts).grid(row=4, column=1, sticky=tk.W, pady=5)
         
-        # Boutons
+        # Boutons de la fiche de panne
         button_frame = ttk.Frame(form_frame)
         button_frame.grid(row=5, column=0, columnspan=2, pady=20)
         
         ttk.Button(button_frame, text="Enregistrer", command=self.save_fiche_panne).pack(side=tk.LEFT, padx=5)
         ttk.Button(button_frame, text="Effacer", command=self.clear_fiche_panne).pack(side=tk.LEFT, padx=5)
+        
+        # Frame pour le résumé des tests (à droite)
+        test_frame = ttk.LabelFrame(sections_frame, text="Résumé des tests", padding=10)
+        test_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=(5, 0))
+        
+        # Zone de texte pour le résumé des tests
+        self.test_summary_text = tk.Text(test_frame, height=20, width=40)
+        self.test_summary_text.pack(fill=tk.BOTH, expand=True)
         
         # Mettre à jour la liste des appareils
         self.update_appareil_list()
@@ -171,6 +186,42 @@ class MainWindow(tk.Tk):
         else:
             self.clear_fiche_panne()
             
+        # Mettre à jour le résumé des tests
+        self.update_test_summary(appareil_id)
+        
+    def update_test_summary(self, appareil_id):
+        """Met à jour le résumé des tests pour l'appareil sélectionné"""
+        test = self.gestionnaire.get_test(appareil_id)
+        self.test_summary_text.delete(1.0, tk.END)
+        
+        if not test:
+            self.test_summary_text.insert(1.0, "Aucun test effectué")
+            return
+            
+        summary = "Vérifications visuelles:\n"
+        summary += f"✓ Commande: {'OK' if test.commande_ok else 'Non testé'}\n"
+        summary += f"✓ Verrou porte: {'OK' if test.verrou_porte_ok else 'Non testé'}\n"
+        summary += f"✓ Rotation tambour: {'OK' if test.rotation_tambour_ok else 'Non testé'}\n"
+        summary += f"✓ Chauffe: {'OK' if test.chauffe_ok else 'Non testé'}\n"
+        summary += f"✓ Essorage: {'OK' if test.essorage_ok else 'Non testé'}\n"
+        summary += f"✓ Séchage: {'OK' if test.sechage_ok else 'Non testé'}\n\n"
+        
+        summary += "Programmes testés:\n"
+        summary += f"• Express: {test.programme_express or 'Non testé'}\n"
+        summary += f"• Chauffe: {test.programme_chauffe or 'Non testé'}\n"
+        summary += f"• Rotation: {test.programme_rotation or 'Non testé'}\n\n"
+        
+        if test.observations.get('journal_problemes'):
+            summary += "Derniers problèmes:\n"
+            # Prendre les 3 dernières lignes du journal
+            problems = test.observations['journal_problemes'].split('\n')[-3:]
+            summary += '\n'.join(problems) + '\n\n'
+            
+        if test.statut:
+            summary += f"Statut du test: {test.statut}"
+            
+        self.test_summary_text.insert(1.0, summary)
+        
     def save_fiche_panne(self):
         if not self.appareil_var.get():
             messagebox.showerror("Erreur", "Veuillez sélectionner un appareil")
@@ -228,12 +279,52 @@ class MainWindow(tk.Tk):
         if not self.appareil_var.get():
             messagebox.showerror("Erreur", "Veuillez sélectionner un appareil dans la liste déroulante")
             return
+            
         appareil_id = self.appareil_var.get().split(" - ")[0]
         appareil = self.gestionnaire.get_appareil_by_id(appareil_id)
         if not appareil:
             messagebox.showerror("Erreur", "Appareil non trouvé")
             return
-        TestWindow(self, appareil)
+            
+        self.ouvrir_fenetre_test(appareil)
+
+    def ouvrir_fenetre_test(self, appareil):
+        # Vérifier si une fenêtre de test est déjà ouverte pour cet appareil
+        if appareil.identifiant in self.test_windows:
+            # Si la fenêtre existe mais a été fermée, la retirer du dictionnaire
+            if not self.test_windows[appareil.identifiant].winfo_exists():
+                del self.test_windows[appareil.identifiant]
+            else:
+                # Si la fenêtre existe toujours, afficher un message et proposer des options
+                reponse = messagebox.askyesnocancel(
+                    "Fenêtre de test déjà ouverte",
+                    f"Une fenêtre de test est déjà ouverte pour l'appareil {appareil.identifiant}.\n\n"
+                    "Voulez-vous :\n"
+                    "- 'Oui' : Basculer vers la fenêtre existante\n"
+                    "- 'Non' : Ouvrir une nouvelle fenêtre\n"
+                    "- 'Annuler' : Ne rien faire"
+                )
+                
+                if reponse is None:  # Annuler
+                    return
+                elif reponse:  # Oui - basculer vers la fenêtre existante
+                    self.test_windows[appareil.identifiant].lift()
+                    self.test_windows[appareil.identifiant].focus_force()
+                    return
+                else:  # Non - fermer l'ancienne fenêtre et en ouvrir une nouvelle
+                    self.test_windows[appareil.identifiant].destroy()
+        
+        # Créer une nouvelle fenêtre de test
+        test_window = TestWindow(self, appareil)
+        # Stocker la référence de la fenêtre
+        self.test_windows[appareil.identifiant] = test_window
+        # Configurer la fenêtre pour qu'elle se retire du dictionnaire quand elle est fermée
+        test_window.protocol("WM_DELETE_WINDOW", lambda: self.fermer_fenetre_test(appareil.identifiant))
+
+    def fermer_fenetre_test(self, appareil_id):
+        # Retirer la fenêtre du dictionnaire
+        if appareil_id in self.test_windows:
+            del self.test_windows[appareil_id]
 
     def afficher_synthese_machine(self, event):
         selection = self.tree.selection()
@@ -262,6 +353,11 @@ class MainWindow(tk.Tk):
         file_menu = tk.Menu(menubar, tearoff=0)
         menubar.add_cascade(label="Fichier", menu=file_menu)
         file_menu.add_command(label="Quitter", command=self.quit)
+        
+        # Menu Fenêtres
+        windows_menu = tk.Menu(menubar, tearoff=0)
+        menubar.add_cascade(label="Fenêtres", menu=windows_menu)
+        windows_menu.add_command(label="Fenêtres de test ouvertes", command=self.afficher_fenetres_test)
         
         # Menu Sauvegardes
         backup_menu = tk.Menu(menubar, tearoff=0)
@@ -335,4 +431,60 @@ class MainWindow(tk.Tk):
         """Effectue une sauvegarde automatique et programme la prochaine"""
         self.gestionnaire.sauvegarder_tests()
         # Programmer la prochaine sauvegarde
-        self.after(300000, self.sauvegarde_automatique) 
+        self.after(300000, self.sauvegarde_automatique)
+
+    def afficher_fenetres_test(self):
+        """Affiche une fenêtre listant toutes les fenêtres de test ouvertes"""
+        if not self.test_windows:
+            messagebox.showinfo("Information", "Aucune fenêtre de test ouverte")
+            return
+            
+        # Créer une nouvelle fenêtre
+        window = tk.Toplevel(self)
+        window.title("Fenêtres de test ouvertes")
+        window.geometry("400x300")
+        
+        # Frame principal
+        frame = ttk.Frame(window, padding="10")
+        frame.pack(fill=tk.BOTH, expand=True)
+        
+        # Liste des fenêtres
+        ttk.Label(frame, text="Fenêtres de test actuellement ouvertes :").pack(anchor=tk.W)
+        
+        # Créer un Treeview
+        columns = ("Appareil", "Statut")
+        tree = ttk.Treeview(frame, columns=columns, show="headings")
+        
+        # Définir les en-têtes
+        for col in columns:
+            tree.heading(col, text=col)
+            tree.column(col, width=150)
+        
+        # Ajouter les fenêtres
+        for appareil_id, test_window in self.test_windows.items():
+            if test_window.winfo_exists():
+                # Récupérer le statut du test
+                test = self.gestionnaire.get_test(appareil_id)
+                statut = test.statut if test else "en_cours"
+                tree.insert("", tk.END, values=(appareil_id, statut))
+        
+        tree.pack(fill=tk.BOTH, expand=True, pady=5)
+        
+        # Boutons
+        button_frame = ttk.Frame(frame)
+        button_frame.pack(fill=tk.X, pady=10)
+        
+        def basculer_vers_fenetre():
+            selection = tree.selection()
+            if not selection:
+                messagebox.showwarning("Attention", "Veuillez sélectionner une fenêtre")
+                return
+                
+            appareil_id = tree.item(selection[0])["values"][0]
+            if appareil_id in self.test_windows:
+                self.test_windows[appareil_id].lift()
+                self.test_windows[appareil_id].focus_force()
+                window.destroy()
+        
+        ttk.Button(button_frame, text="Basculer vers la fenêtre", command=basculer_vers_fenetre).pack(side=tk.LEFT, padx=5)
+        ttk.Button(button_frame, text="Fermer", command=window.destroy).pack(side=tk.RIGHT, padx=5) 

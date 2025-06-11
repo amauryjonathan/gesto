@@ -33,7 +33,7 @@
         "chauffe_ok": "non_testé",
         "essorage_ok": false,
         "sechage_ok": false,
-        "programme_express": "non_testé",
+        "programme_express": "échoué",
         "programme_chauffe": "non_testé",
         "programme_rotation": "non_testé",
         "observations": {
@@ -46,9 +46,9 @@
             "programme_express": "",
             "programme_chauffe": "",
             "programme_rotation": "",
-            "journal_problemes": "",
+            "journal_problemes": "Tentative 1 du programme Express\n[00:00:08] Programme Express (Tentative 1): le programme bug\nTentative 2 du programme Express\n[00:00:25] Programme Express (Tentative 2): apres correction de l'électrique la machine s'emballe",
             "tentatives": {
-                "Express": 0,
+                "Express": 2,
                 "Chauffe": 0,
                 "Rotation": 0
             }
@@ -89,6 +89,62 @@
     "F008": {
         "appareil_id": "F008",
         "date_verification": "2025-06-11 08:13:57",
+        "commande_ok": false,
+        "verrou_porte_ok": false,
+        "rotation_tambour_ok": false,
+        "chauffe_ok": false,
+        "essorage_ok": false,
+        "sechage_ok": false,
+        "programme_express": "non_testé",
+        "programme_chauffe": "non_testé",
+        "programme_rotation": "non_testé",
+        "observations": {
+            "commande": "",
+            "verrou_porte": "",
+            "rotation_tambour": "",
+            "chauffe": "",
+            "essorage": "",
+            "sechage": "",
+            "programme_express": "",
+            "programme_chauffe": "",
+            "programme_rotation": ""
+        },
+        "statut": "en_cours"
+    },
+    "F003": {
+        "appareil_id": "F003",
+        "date_verification": "2025-06-11 08:16:50",
+        "commande_ok": false,
+        "verrou_porte_ok": false,
+        "rotation_tambour_ok": "non_testé",
+        "chauffe_ok": "échoué",
+        "essorage_ok": false,
+        "sechage_ok": false,
+        "programme_express": "réussi",
+        "programme_chauffe": "échoué",
+        "programme_rotation": "non_testé",
+        "observations": {
+            "commande": "",
+            "verrou_porte": "",
+            "rotation_tambour": "",
+            "chauffe": "",
+            "essorage": "",
+            "sechage": "",
+            "programme_express": "",
+            "programme_chauffe": "",
+            "programme_rotation": "",
+            "journal_problemes": "Tentative 1 du programme Express\n[00:00:22] Programme Express (Tentative 1): le programme ne se lance pas\nTentative 1 du programme Chauffe\n[00:00:06] Programme Chauffe (Tentative 1): e chauffe pas",
+            "tentatives": {
+                "Express": 1,
+                "Chauffe": 1,
+                "Rotation": 0
+            }
+        },
+        "statut": "en_cours"
+    },
+    "F004": {
+        "appareil_id": "F004",
+        "date_verification": "2025-06-11 08:33:26",
         "commande_ok": false,
         "verrou_porte_ok": false,
         "rotation_tambour_ok": false,

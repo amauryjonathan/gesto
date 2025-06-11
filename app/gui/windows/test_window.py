@@ -9,7 +9,12 @@ class TestWindow(tk.Toplevel):
         self.parent = parent
         self.appareil = appareil
         
+        print(f"Initialisation de la fenêtre de test pour {appareil.identifiant}")
+        
         self.title(f"Test - {appareil.identifiant}")
+        # Définir une taille minimale pour la fenêtre
+        self.minsize(800, 600)
+        # Définir la taille par défaut
         self.geometry("1000x800")
         
         # Variables pour les timers
@@ -19,7 +24,9 @@ class TestWindow(tk.Toplevel):
         
         # Créer ou récupérer le test existant
         self.test = self.parent.gestionnaire.get_test(appareil.identifiant)
+        print(f"Test récupéré : {self.test}")
         if not self.test:
+            print("Création d'un nouveau test")
             self.test = self.parent.gestionnaire.ajouter_test(appareil.identifiant)
         
         # Charger le nombre de tentatives sauvegardé (si existant)
@@ -33,24 +40,55 @@ class TestWindow(tk.Toplevel):
             if prog not in self.tentatives:
                 self.tentatives[prog] = 0
         
+        print("Création des widgets")
         self.create_widgets()
+        print("Widgets créés")
         
     def create_widgets(self):
-        # Frame principal
-        main_frame = ttk.Frame(self, padding="10")
+        # Frame principal avec scrollbar
+        main_container = ttk.Frame(self)
+        main_container.pack(fill=tk.BOTH, expand=True)
+        
+        # Canvas pour le scroll
+        canvas = tk.Canvas(main_container)
+        scrollbar = ttk.Scrollbar(main_container, orient="vertical", command=canvas.yview)
+        scrollable_frame = ttk.Frame(canvas)
+        
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+        
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw", width=canvas.winfo_width())
+        canvas.configure(yscrollcommand=scrollbar.set)
+        
+        # Pack des éléments de scroll
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+        
+        # Frame principal avec padding
+        main_frame = ttk.Frame(scrollable_frame, padding="10")
         main_frame.pack(fill=tk.BOTH, expand=True)
         
         # Vérifications visuelles
         visu_frame = ttk.LabelFrame(main_frame, text="Vérifications visuelles", padding="5")
         visu_frame.pack(fill=tk.X, pady=5)
         
+        # Fonction pour convertir les valeurs en booléens
+        def to_bool(value):
+            if isinstance(value, bool):
+                return value
+            if isinstance(value, str):
+                return value.lower() in ['true', 'vrai', 'ok', 'réussi']
+            return False
+        
         # Variables pour les cases à cocher
-        self.commande_var = tk.BooleanVar(value=self.test.commande_ok)
-        self.verrou_var = tk.BooleanVar(value=self.test.verrou_porte_ok)
-        self.rotation_var = tk.BooleanVar(value=self.test.rotation_tambour_ok)
-        self.chauffe_var = tk.BooleanVar(value=self.test.chauffe_ok)
-        self.essorage_var = tk.BooleanVar(value=self.test.essorage_ok)
-        self.sechage_var = tk.BooleanVar(value=self.test.sechage_ok)
+        self.commande_var = tk.BooleanVar(value=to_bool(self.test.commande_ok))
+        self.verrou_var = tk.BooleanVar(value=to_bool(self.test.verrou_porte_ok))
+        self.rotation_var = tk.BooleanVar(value=to_bool(self.test.rotation_tambour_ok))
+        self.chauffe_var = tk.BooleanVar(value=to_bool(self.test.chauffe_ok))
+        self.essorage_var = tk.BooleanVar(value=to_bool(self.test.essorage_ok))
+        self.sechage_var = tk.BooleanVar(value=to_bool(self.test.sechage_ok))
         
         # Cases à cocher
         ttk.Checkbutton(visu_frame, text="Commande (bandeau)", variable=self.commande_var).pack(anchor=tk.W, pady=2)
@@ -75,15 +113,15 @@ class TestWindow(tk.Toplevel):
         self.timer_button.pack(side=tk.LEFT, padx=5)
         
         # Variables pour les programmes
-        self.express_var = tk.StringVar(value=self.test.programme_express)
-        self.chauffe_var = tk.StringVar(value=self.test.programme_chauffe)
-        self.rotation_var = tk.StringVar(value=self.test.programme_rotation)
+        self.express_var = tk.StringVar(value=self.test.programme_express or "non_testé")
+        self.chauffe_var = tk.StringVar(value=self.test.programme_chauffe or "non_testé")
+        self.rotation_var = tk.StringVar(value=self.test.programme_rotation or "non_testé")
         
         # Frame pour chaque programme
         self._prev_status = {
-            "Express": self.test.programme_express,
-            "Chauffe": self.test.programme_chauffe,
-            "Rotation": self.test.programme_rotation
+            "Express": self.test.programme_express or "non_testé",
+            "Chauffe": self.test.programme_chauffe or "non_testé",
+            "Rotation": self.test.programme_rotation or "non_testé"
         }
         
         for prog_name, prog_var in [("Express", self.express_var), 
@@ -107,8 +145,14 @@ class TestWindow(tk.Toplevel):
         journal_frame = ttk.LabelFrame(main_frame, text="Journal des problèmes", padding="5")
         journal_frame.pack(fill=tk.BOTH, expand=True, pady=5)
         
-        self.journal_text = tk.Text(journal_frame, height=10)
+        # Ajouter une scrollbar pour le journal
+        journal_scroll = ttk.Scrollbar(journal_frame)
+        journal_scroll.pack(side=tk.RIGHT, fill=tk.Y)
+        
+        self.journal_text = tk.Text(journal_frame, height=10, yscrollcommand=journal_scroll.set)
         self.journal_text.pack(fill=tk.BOTH, expand=True)
+        journal_scroll.config(command=self.journal_text.yview)
+        
         # Charger le journal sauvegardé
         journal_saved = self.test.observations.get("journal_problemes", "")
         self.journal_text.delete("1.0", tk.END)
@@ -118,23 +162,35 @@ class TestWindow(tk.Toplevel):
         obs_frame = ttk.LabelFrame(main_frame, text="Observations", padding="5")
         obs_frame.pack(fill=tk.BOTH, expand=True, pady=5)
         
-        self.observations_text = tk.Text(obs_frame, height=10)
+        # Ajouter une scrollbar pour les observations
+        obs_scroll = ttk.Scrollbar(obs_frame)
+        obs_scroll.pack(side=tk.RIGHT, fill=tk.Y)
+        
+        self.observations_text = tk.Text(obs_frame, height=10, yscrollcommand=obs_scroll.set)
         self.observations_text.pack(fill=tk.BOTH, expand=True)
+        obs_scroll.config(command=self.observations_text.yview)
         
         # Charger les observations en excluant journal_problemes et tentatives
         observations = {k: v for k, v in self.test.observations.items() 
-                       if k not in ["journal_problemes", "tentatives"] and v}  # Ajout de 'and v' pour ne garder que les observations non vides
+                       if k not in ["journal_problemes", "tentatives"] and v}
         self.observations_text.delete("1.0", tk.END)
-        if observations:  # Si il y a des observations
+        if observations:
             self.observations_text.insert("1.0", "\n".join(f"{k}: {v}" for k, v in observations.items()))
         
-        # Boutons
-        button_frame = ttk.Frame(main_frame)
-        button_frame.pack(fill=tk.X, pady=10)
+        # Frame pour les boutons (toujours visible en bas)
+        button_frame = ttk.Frame(self)
+        button_frame.pack(side=tk.BOTTOM, fill=tk.X, padx=10, pady=10)
         
         ttk.Button(button_frame, text="Enregistrer", command=self.save_verification).pack(side=tk.LEFT, padx=5)
         ttk.Button(button_frame, text="Valider", command=self.validate_verification).pack(side=tk.LEFT, padx=5)
         ttk.Button(button_frame, text="Fermer", command=self.destroy).pack(side=tk.RIGHT, padx=5)
+        
+        # Configurer le canvas pour qu'il s'adapte à la taille de la fenêtre
+        def configure_canvas(event):
+            canvas.configure(width=event.width)
+            canvas.itemconfig(canvas.find_withtag("all")[0], width=event.width)
+        
+        canvas.bind("<Configure>", configure_canvas)
         
     def toggle_timer(self):
         if not self.timer_running:
@@ -281,4 +337,10 @@ class TestWindow(tk.Toplevel):
         )
         
         messagebox.showinfo("Succès", "Tests validés avec succès!")
-        self.destroy() 
+        self.destroy()
+
+    def destroy(self):
+        # Appeler la méthode de fermeture de la fenêtre principale
+        if hasattr(self.parent, 'fermer_fenetre_test'):
+            self.parent.fermer_fenetre_test(self.appareil.identifiant)
+        super().destroy() 

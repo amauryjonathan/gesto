@@ -18,5 +18,15 @@
         "statut": "à réparer",
         "date_resolution": null,
         "technicien": ""
+    },
+    "F003": {
+        "appareil_id": "F003",
+        "date_creation": "2025-06-11 08:29:12",
+        "symptome": "la machine tousse",
+        "cause_probable": "",
+        "notes_techniques": "",
+        "statut": "à réparer",
+        "date_resolution": null,
+        "technicien": ""
     }
 }

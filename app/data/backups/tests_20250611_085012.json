@@ -27,8 +27,8 @@
     "F005": {
         "appareil_id": "F005",
         "date_verification": "2025-06-11 07:44:22",
-        "commande_ok": true,
-        "verrou_porte_ok": true,
+        "commande_ok": false,
+        "verrou_porte_ok": false,
         "rotation_tambour_ok": "non_testé",
         "chauffe_ok": "non_testé",
         "essorage_ok": false,
