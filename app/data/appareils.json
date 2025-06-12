@@ -1467,6 +1467,18 @@
       "emplacement": null,
       "position": null,
       "specifique": 0
+    },
+    {
+      "identifiant": "L042",
+      "marque": "Samsung",
+      "reference": "WD12DWW/S3",
+      "numero_serie": "09TG5NARC00157X",
+      "date_arrivee": "12/06/2025",
+      "statut": "à réparer",
+      "cellule": null,
+      "emplacement": null,
+      "position": null,
+      "specifique": 0
     }
   ],
   "lave_linge_sechant": [

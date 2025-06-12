@@ -42,18 +42,47 @@ class MainWindow(tk.Tk):
         self.create_depannage_tab()
         
     def create_presentation_tab(self):
-        # Frame pour la recherche
-        search_frame = ttk.Frame(self.presentation_frame)
-        search_frame.pack(fill="x", padx=5, pady=5)
+        # Frame pour les filtres avancés
+        filters_frame = ttk.LabelFrame(self.presentation_frame, text="Filtres", padding=10)
+        filters_frame.pack(fill="x", padx=5, pady=5)
         
-        ttk.Label(search_frame, text="Rechercher:").pack(side="left", padx=5)
-        self.search_var = tk.StringVar()
-        self.search_var.trace("w", self.filter_tree)
-        search_entry = ttk.Entry(search_frame, textvariable=self.search_var, width=40)
-        search_entry.pack(side="left", padx=5)
+        # Frame pour les filtres existants
+        self.filters_container = ttk.Frame(filters_frame)
+        self.filters_container.pack(fill="x", pady=5)
         
-        # Bouton pour effacer la recherche
-        ttk.Button(search_frame, text="Effacer", command=self.clear_search).pack(side="left", padx=5)
+        # Frame pour ajouter un nouveau filtre
+        add_filter_frame = ttk.Frame(filters_frame)
+        add_filter_frame.pack(fill="x", pady=5)
+        
+        # Liste des colonnes disponibles
+        self.columns = {
+            "identifiant": "Identifiant",
+            "type": "Type",
+            "marque": "Marque",
+            "reference": "Référence",
+            "numero_serie": "Numéro de série",
+            "date_arrivee": "Date d'arrivée",
+            "statut": "Statut",
+            "localisation": "Localisation"
+        }
+        
+        # Combobox pour sélectionner la colonne
+        ttk.Label(add_filter_frame, text="Ajouter un filtre:").pack(side="left", padx=5)
+        self.filter_column_var = tk.StringVar()
+        filter_column_combo = ttk.Combobox(add_filter_frame, textvariable=self.filter_column_var, 
+                                         values=list(self.columns.values()), state="readonly", width=20)
+        filter_column_combo.pack(side="left", padx=5)
+        
+        # Bouton pour ajouter le filtre
+        ttk.Button(add_filter_frame, text="Ajouter", 
+                  command=self.add_filter).pack(side="left", padx=5)
+        
+        # Bouton pour effacer tous les filtres
+        ttk.Button(add_filter_frame, text="Effacer tous les filtres", 
+                  command=self.clear_all_filters).pack(side="right", padx=5)
+        
+        # Liste des filtres actifs
+        self.active_filters = []
         
         # Frame pour la liste des appareils
         list_frame = ttk.Frame(self.presentation_frame)
@@ -285,6 +314,10 @@ class MainWindow(tk.Tk):
                     appareil.statut,
                     localisation
                 ))
+        
+        # Mettre à jour la liste des appareils seulement si elle existe déjà
+        if hasattr(self, 'appareil_combo'):
+            self.update_appareil_list()
         
     def ouvrir_ajout(self):
         AjoutWindow(self, self.refresh_liste)
@@ -529,31 +562,83 @@ class MainWindow(tk.Tk):
             else:
                 self.tree.heading(column, text=self.tree.heading(column)['text'].replace(' ↓', '').replace(' ↑', ''))
 
-    def clear_search(self):
-        """Efface le texte de recherche et réinitialise l'affichage"""
-        self.search_var.set("")
-        self.refresh_liste()  # Réinitialiser la liste complète
-
-    def filter_tree(self, *args):
-        """Filtre les éléments de la Treeview selon le texte de recherche"""
-        search_text = self.search_var.get().lower()
+    def clear_all_filters(self):
+        """Efface tous les filtres actifs"""
+        # Supprimer tous les filtres de l'interface
+        for filter in self.active_filters:
+            filter['frame'].destroy()
         
-        # Si la recherche est vide, réinitialiser la liste
-        if not search_text:
-            self.refresh_liste()
+        # Vider la liste des filtres actifs
+        self.active_filters.clear()
+        
+        # Réinitialiser la liste complète
+        self.refresh_liste()
+
+    def add_filter(self):
+        """Ajoute un nouveau filtre à l'interface"""
+        column = self.filter_column_var.get()
+        if not column:
             return
             
-        # Sauvegarder tous les éléments actuels avec leurs valeurs
-        all_items = []
-        for item in self.tree.get_children():
-            values = [str(self.tree.set(item, col)).lower() for col in self.tree["columns"]]
-            original_values = [self.tree.set(item, col) for col in self.tree["columns"]]
-            all_items.append((values, original_values))
+        # Créer un frame pour le filtre
+        filter_frame = ttk.Frame(self.filters_container)
+        filter_frame.pack(fill="x", pady=2)
         
-        # Effacer le treeview
-        self.tree.delete(*self.tree.get_children())
+        # Label avec le nom de la colonne
+        ttk.Label(filter_frame, text=f"{column}:").pack(side="left", padx=5)
         
-        # Réinsérer les éléments qui correspondent à la recherche
-        for values, original_values in all_items:
-            if any(search_text in value for value in values):
-                self.tree.insert("", tk.END, values=original_values) 
+        # Champs de saisie selon le type de colonne
+        if column in ["Identifiant", "Numéro de série"]:
+            # Deux champs pour les plages
+            ttk.Label(filter_frame, text="De:").pack(side="left", padx=5)
+            from_entry = ttk.Entry(filter_frame, width=10)
+            from_entry.pack(side="left", padx=5)
+            from_entry.bind('<KeyRelease>', lambda e: self.apply_filters())
+            
+            ttk.Label(filter_frame, text="À:").pack(side="left", padx=5)
+            to_entry = ttk.Entry(filter_frame, width=10)
+            to_entry.pack(side="left", padx=5)
+            to_entry.bind('<KeyRelease>', lambda e: self.apply_filters())
+            
+        elif column == "Date d'arrivée":
+            # Deux champs de date
+            ttk.Label(filter_frame, text="De:").pack(side="left", padx=5)
+            from_date = ttk.Entry(filter_frame, width=10)
+            from_date.pack(side="left", padx=5)
+            from_date.bind('<KeyRelease>', lambda e: self.apply_filters())
+            
+            ttk.Label(filter_frame, text="À:").pack(side="left", padx=5)
+            to_date = ttk.Entry(filter_frame, width=10)
+            to_date.pack(side="left", padx=5)
+            to_date.bind('<KeyRelease>', lambda e: self.apply_filters())
+            
+        else:
+            # Ajout d'une zone de saisie texte ET d'une liste déroulante
+            text_var = tk.StringVar()
+            text_entry = ttk.Entry(filter_frame, textvariable=text_var, width=15)
+            text_entry.pack(side="left", padx=5)
+            text_entry.bind('<KeyRelease>', lambda e: self.apply_filters())
+            
+            values = self.get_column_values(column)
+            combo_var = tk.StringVar()
+            filter_combo = ttk.Combobox(filter_frame, textvariable=combo_var, 
+                                      values=values, state="readonly", width=15)
+            filter_combo.pack(side="left", padx=5)
+            filter_combo.bind('<<ComboboxSelected>>', lambda e: self.apply_filters())
+        
+        # Bouton pour supprimer le filtre
+        ttk.Button(filter_frame, text="×", width=3,
+                  command=lambda f=filter_frame: self.remove_filter(f)).pack(side="right", padx=5)
+        
+        # Ajouter le filtre à la liste des filtres actifs
+        self.active_filters.append({
+            'frame': filter_frame,
+            'column': column,
+            'widgets': filter_frame.winfo_children()
+        })
+        
+        # Réinitialiser la sélection
+        self.filter_column_var.set("")
+        
+        # Appliquer les filtres
+        self.apply_filters() 

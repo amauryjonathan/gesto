@@ -166,5 +166,36 @@
             "programme_rotation": ""
         },
         "statut": "en_cours"
+    },
+    "L041": {
+        "appareil_id": "L041",
+        "date_verification": "2025-06-12 08:55:06",
+        "commande_ok": true,
+        "verrou_porte_ok": true,
+        "rotation_tambour_ok": "réussi",
+        "chauffe_ok": "réussi",
+        "essorage_ok": true,
+        "sechage_ok": true,
+        "programme_express": "réussi",
+        "programme_chauffe": "réussi",
+        "programme_rotation": "réussi",
+        "observations": {
+            "commande": "",
+            "verrou_porte": "",
+            "rotation_tambour": "",
+            "chauffe": "",
+            "essorage": "",
+            "sechage": "",
+            "programme_express": "",
+            "programme_chauffe": "",
+            "programme_rotation": "",
+            "journal_problemes": "Tentative 1 du programme Express",
+            "tentatives": {
+                "Express": 1,
+                "Chauffe": 0,
+                "Rotation": 0
+            }
+        },
+        "statut": "en_cours"
     }
 }

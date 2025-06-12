@@ -28,5 +28,15 @@
         "statut": "à réparer",
         "date_resolution": null,
         "technicien": ""
+    },
+    "L041": {
+        "appareil_id": "L041",
+        "date_creation": "2025-06-12 08:57:22",
+        "symptome": "",
+        "cause_probable": "",
+        "notes_techniques": "",
+        "statut": "diagnostiquer",
+        "date_resolution": null,
+        "technicien": ""
     }
 }
