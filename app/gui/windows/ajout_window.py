@@ -135,6 +135,14 @@ class AjoutWindow(tk.Toplevel):
                     return True
         return False
         
+    def verifier_numero_serie_existant(self, numero_serie):
+        """Vérifie si le numéro de série existe déjà"""
+        for appareils in self.master.gestionnaire.appareils.values():
+            for appareil in appareils:
+                if appareil.numero_serie == numero_serie:
+                    return True
+        return False
+        
     def ajouter_appareil(self):
         """Ajoute un nouvel appareil"""
         # Récupération des valeurs
@@ -165,6 +173,11 @@ class AjoutWindow(tk.Toplevel):
         # Vérification si l'appareil existe déjà
         if self.verifier_appareil_existant(type_app, marque, reference):
             messagebox.showerror("Erreur", "Cet appareil existe déjà dans la base!")
+            return
+            
+        # Vérification si le numéro de série existe déjà
+        if self.verifier_numero_serie_existant(numero_serie):
+            messagebox.showerror("Erreur", "Ce numéro de série existe déjà dans la base!")
             return
             
         try:

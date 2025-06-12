@@ -53,19 +53,37 @@ class Test:
     
     @classmethod
     def from_dict(cls, data):
-        verification = cls(data["appareil_id"], data["date_verification"])
-        verification.commande_ok = data["commande_ok"]
-        verification.verrou_porte_ok = data["verrou_porte_ok"]
-        verification.rotation_tambour_ok = data["rotation_tambour_ok"]
-        verification.chauffe_ok = data["chauffe_ok"]
-        verification.essorage_ok = data["essorage_ok"]
-        verification.sechage_ok = data["sechage_ok"]
-        verification.programme_express = data["programme_express"]
-        verification.programme_chauffe = data["programme_chauffe"]
-        verification.programme_rotation = data["programme_rotation"]
-        verification.observations = data["observations"]
-        verification.statut = data["statut"]
-        return verification
+        """Crée un test à partir d'un dictionnaire"""
+        test = cls(data["appareil_id"], data.get("date_verification"))
+        
+        # Gérer les valeurs booléennes et non_testé
+        def to_bool(value):
+            if isinstance(value, bool):
+                return value
+            if isinstance(value, str):
+                return value.lower() in ['true', 'vrai', 'ok']
+            return False
+        
+        # Mettre à jour les vérifications visuelles
+        test.commande_ok = data.get("commande_ok", False)
+        test.verrou_porte_ok = data.get("verrou_porte_ok", False)
+        test.rotation_tambour_ok = data.get("rotation_tambour_ok", False)
+        test.chauffe_ok = data.get("chauffe_ok", False)
+        test.essorage_ok = data.get("essorage_ok", False)
+        test.sechage_ok = data.get("sechage_ok", False)
+        
+        # Mettre à jour les programmes
+        test.programme_express = data.get("programme_express", "non_testé")
+        test.programme_chauffe = data.get("programme_chauffe", "non_testé")
+        test.programme_rotation = data.get("programme_rotation", "non_testé")
+        
+        # Mettre à jour les observations
+        test.observations = data.get("observations", {})
+        
+        # Mettre à jour le statut
+        test.statut = data.get("statut", "en_cours")
+        
+        return test
     
     def est_complete(self):
         """Vérifie si toutes les vérifications ont été effectuées"""

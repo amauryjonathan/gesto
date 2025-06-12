@@ -79,22 +79,22 @@ class TestWindow(tk.Toplevel):
             if isinstance(value, bool):
                 return value
             if isinstance(value, str):
-                return value.lower() in ['true', 'vrai', 'ok', 'réussi']
+                return value.lower() in ['true', 'vrai', 'ok']
             return False
         
         # Variables pour les cases à cocher
         self.commande_var = tk.BooleanVar(value=to_bool(self.test.commande_ok))
         self.verrou_var = tk.BooleanVar(value=to_bool(self.test.verrou_porte_ok))
-        self.rotation_var = tk.BooleanVar(value=to_bool(self.test.rotation_tambour_ok))
-        self.chauffe_var = tk.BooleanVar(value=to_bool(self.test.chauffe_ok))
+        self.rotation_check_var = tk.BooleanVar(value=to_bool(self.test.rotation_tambour_ok))
+        self.chauffe_check_var = tk.BooleanVar(value=to_bool(self.test.chauffe_ok))
         self.essorage_var = tk.BooleanVar(value=to_bool(self.test.essorage_ok))
         self.sechage_var = tk.BooleanVar(value=to_bool(self.test.sechage_ok))
         
         # Cases à cocher
         ttk.Checkbutton(visu_frame, text="Commande (bandeau)", variable=self.commande_var).pack(anchor=tk.W, pady=2)
         ttk.Checkbutton(visu_frame, text="Verrou de porte", variable=self.verrou_var).pack(anchor=tk.W, pady=2)
-        ttk.Checkbutton(visu_frame, text="Rotation du tambour", variable=self.rotation_var).pack(anchor=tk.W, pady=2)
-        ttk.Checkbutton(visu_frame, text="Chauffe", variable=self.chauffe_var).pack(anchor=tk.W, pady=2)
+        ttk.Checkbutton(visu_frame, text="Rotation du tambour", variable=self.rotation_check_var).pack(anchor=tk.W, pady=2)
+        ttk.Checkbutton(visu_frame, text="Chauffe", variable=self.chauffe_check_var).pack(anchor=tk.W, pady=2)
         ttk.Checkbutton(visu_frame, text="Essorage", variable=self.essorage_var).pack(anchor=tk.W, pady=2)
         ttk.Checkbutton(visu_frame, text="Séchage", variable=self.sechage_var).pack(anchor=tk.W, pady=2)
         
@@ -113,9 +113,9 @@ class TestWindow(tk.Toplevel):
         self.timer_button.pack(side=tk.LEFT, padx=5)
         
         # Variables pour les programmes
-        self.express_var = tk.StringVar(value=self.test.programme_express or "non_testé")
-        self.chauffe_var = tk.StringVar(value=self.test.programme_chauffe or "non_testé")
-        self.rotation_var = tk.StringVar(value=self.test.programme_rotation or "non_testé")
+        self.express_prog_var = tk.StringVar(value=self.test.programme_express or "non_testé")
+        self.chauffe_prog_var = tk.StringVar(value=self.test.programme_chauffe or "non_testé")
+        self.rotation_prog_var = tk.StringVar(value=self.test.programme_rotation or "non_testé")
         
         # Frame pour chaque programme
         self._prev_status = {
@@ -124,9 +124,9 @@ class TestWindow(tk.Toplevel):
             "Rotation": self.test.programme_rotation or "non_testé"
         }
         
-        for prog_name, prog_var in [("Express", self.express_var), 
-                                  ("Chauffe", self.chauffe_var),
-                                  ("Rotation", self.rotation_var)]:
+        for prog_name, prog_var in [("Express", self.express_prog_var), 
+                                  ("Chauffe", self.chauffe_prog_var),
+                                  ("Rotation", self.rotation_prog_var)]:
             prog_subframe = ttk.Frame(prog_frame)
             prog_subframe.pack(fill=tk.X, pady=5)
             
@@ -240,11 +240,11 @@ class TestWindow(tk.Toplevel):
             
     def get_program_var(self, program_name):
         if program_name == "Express":
-            return self.express_var
+            return self.express_prog_var
         elif program_name == "Chauffe":
-            return self.chauffe_var
+            return self.chauffe_prog_var
         elif program_name == "Rotation":
-            return self.rotation_var
+            return self.rotation_prog_var
             
     def add_problem(self, program_name):
         if not self.timer_running:
@@ -284,15 +284,15 @@ class TestWindow(tk.Toplevel):
         # Mise à jour des vérifications visuelles
         self.test.commande_ok = self.commande_var.get()
         self.test.verrou_porte_ok = self.verrou_var.get()
-        self.test.rotation_tambour_ok = self.rotation_var.get()
-        self.test.chauffe_ok = self.chauffe_var.get()
+        self.test.rotation_tambour_ok = self.rotation_check_var.get()
+        self.test.chauffe_ok = self.chauffe_check_var.get()
         self.test.essorage_ok = self.essorage_var.get()
         self.test.sechage_ok = self.sechage_var.get()
         
         # Mise à jour des programmes
-        self.test.programme_express = self.express_var.get()
-        self.test.programme_chauffe = self.chauffe_var.get()
-        self.test.programme_rotation = self.rotation_var.get()
+        self.test.programme_express = self.express_prog_var.get()
+        self.test.programme_chauffe = self.chauffe_prog_var.get()
+        self.test.programme_rotation = self.rotation_prog_var.get()
         
         # Mise à jour des observations
         observations_text = self.observations_text.get("1.0", tk.END).strip()
