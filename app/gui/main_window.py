@@ -42,31 +42,41 @@ class MainWindow(tk.Tk):
         self.create_depannage_tab()
         
     def create_presentation_tab(self):
+        # Frame pour la recherche
+        search_frame = ttk.Frame(self.presentation_frame)
+        search_frame.pack(fill="x", padx=5, pady=5)
+        
+        ttk.Label(search_frame, text="Rechercher:").pack(side="left", padx=5)
+        self.search_var = tk.StringVar()
+        self.search_var.trace("w", self.filter_tree)
+        search_entry = ttk.Entry(search_frame, textvariable=self.search_var, width=40)
+        search_entry.pack(side="left", padx=5)
+        
+        # Bouton pour effacer la recherche
+        ttk.Button(search_frame, text="Effacer", command=self.clear_search).pack(side="left", padx=5)
+        
         # Frame pour la liste des appareils
         list_frame = ttk.Frame(self.presentation_frame)
-        list_frame.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+        list_frame.pack(fill="both", expand=True, padx=5, pady=5)
         
         # Liste des appareils
         self.tree = ttk.Treeview(list_frame, columns=("identifiant", "type", "marque", "reference", "numero_serie", "date_arrivee", "statut", "localisation"), show="headings")
         
         # Configuration des colonnes
-        self.tree.heading("identifiant", text="Identifiant")
-        self.tree.heading("type", text="Type")
-        self.tree.heading("marque", text="Marque")
-        self.tree.heading("reference", text="Référence")
-        self.tree.heading("numero_serie", text="Numéro de série")
-        self.tree.heading("date_arrivee", text="Date d'arrivée")
-        self.tree.heading("statut", text="Statut")
-        self.tree.heading("localisation", text="Localisation")
+        columns = {
+            "identifiant": "Identifiant",
+            "type": "Type",
+            "marque": "Marque",
+            "reference": "Référence",
+            "numero_serie": "Numéro de série",
+            "date_arrivee": "Date d'arrivée",
+            "statut": "Statut",
+            "localisation": "Localisation"
+        }
         
-        self.tree.column("identifiant", width=100)
-        self.tree.column("type", width=100)
-        self.tree.column("marque", width=100)
-        self.tree.column("reference", width=100)
-        self.tree.column("numero_serie", width=150)
-        self.tree.column("date_arrivee", width=100)
-        self.tree.column("statut", width=100)
-        self.tree.column("localisation", width=100)
+        for col, text in columns.items():
+            self.tree.heading(col, text=text, command=lambda c=col: self.sort_tree(c))
+            self.tree.column(col, width=100)
         
         # Scrollbar
         scrollbar = ttk.Scrollbar(list_frame, orient=tk.VERTICAL, command=self.tree.yview)
@@ -89,6 +99,10 @@ class MainWindow(tk.Tk):
         self.synthese_text = tk.Text(self.synthese_frame, height=15)
         self.synthese_text.pack(fill=tk.BOTH, expand=True)
         
+        # Variable pour suivre l'état du tri
+        self.sort_column = None
+        self.sort_reverse = False
+
     def create_depannage_tab(self):
         # Frame principal
         frame = ttk.Frame(self.depannage_frame)
@@ -261,7 +275,7 @@ class MainWindow(tk.Tk):
         for type_app, appareils in self.gestionnaire.appareils.items():
             for appareil in appareils:
                 localisation = f"{appareil.cellule}{appareil.emplacement}{appareil.position}" if appareil.cellule and appareil.emplacement and appareil.position else ""
-                self.tree.insert("", tk.END, values=(
+                item = self.tree.insert("", tk.END, values=(
                     appareil.identifiant,
                     type_app.replace("_", " ").title(),
                     appareil.marque,
@@ -271,7 +285,7 @@ class MainWindow(tk.Tk):
                     appareil.statut,
                     localisation
                 ))
-                
+        
     def ouvrir_ajout(self):
         AjoutWindow(self, self.refresh_liste)
 
@@ -487,4 +501,59 @@ class MainWindow(tk.Tk):
                 window.destroy()
         
         ttk.Button(button_frame, text="Basculer vers la fenêtre", command=basculer_vers_fenetre).pack(side=tk.LEFT, padx=5)
-        ttk.Button(button_frame, text="Fermer", command=window.destroy).pack(side=tk.RIGHT, padx=5) 
+        ttk.Button(button_frame, text="Fermer", command=window.destroy).pack(side=tk.RIGHT, padx=5)
+
+    def sort_tree(self, col):
+        """Trie les éléments de la Treeview selon la colonne sélectionnée"""
+        # Récupérer tous les éléments
+        items = [(self.tree.set(item, col), item) for item in self.tree.get_children("")]
+        
+        # Déterminer si c'est la même colonne que précédemment
+        if self.sort_column == col:
+            self.sort_reverse = not self.sort_reverse
+        else:
+            self.sort_column = col
+            self.sort_reverse = False
+        
+        # Trier les éléments
+        items.sort(reverse=self.sort_reverse)
+        
+        # Réorganiser les éléments dans la Treeview
+        for index, (_, item) in enumerate(items):
+            self.tree.move(item, "", index)
+        
+        # Mettre à jour l'en-tête de la colonne pour indiquer le sens du tri
+        for column in self.tree["columns"]:
+            if column == col:
+                self.tree.heading(column, text=f"{self.tree.heading(column)['text']} {'↓' if self.sort_reverse else '↑'}")
+            else:
+                self.tree.heading(column, text=self.tree.heading(column)['text'].replace(' ↓', '').replace(' ↑', ''))
+
+    def clear_search(self):
+        """Efface le texte de recherche et réinitialise l'affichage"""
+        self.search_var.set("")
+        self.refresh_liste()  # Réinitialiser la liste complète
+
+    def filter_tree(self, *args):
+        """Filtre les éléments de la Treeview selon le texte de recherche"""
+        search_text = self.search_var.get().lower()
+        
+        # Si la recherche est vide, réinitialiser la liste
+        if not search_text:
+            self.refresh_liste()
+            return
+            
+        # Sauvegarder tous les éléments actuels avec leurs valeurs
+        all_items = []
+        for item in self.tree.get_children():
+            values = [str(self.tree.set(item, col)).lower() for col in self.tree["columns"]]
+            original_values = [self.tree.set(item, col) for col in self.tree["columns"]]
+            all_items.append((values, original_values))
+        
+        # Effacer le treeview
+        self.tree.delete(*self.tree.get_children())
+        
+        # Réinsérer les éléments qui correspondent à la recherche
+        for values, original_values in all_items:
+            if any(search_text in value for value in values):
+                self.tree.insert("", tk.END, values=original_values) 

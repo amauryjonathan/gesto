@@ -128,7 +128,12 @@ class AjoutWindow(tk.Toplevel):
     def verifier_appareil_existant(self, type_app, marque, reference):
         """Vérifie si l'appareil existe déjà"""
         appareil_id = f"{type_app}_{marque}_{reference}"
-        return appareil_id in self.master.appareils_dict
+        # Vérifier dans tous les types d'appareils du gestionnaire
+        for appareils in self.master.gestionnaire.appareils.values():
+            for appareil in appareils:
+                if appareil.marque == marque and appareil.reference == reference:
+                    return True
+        return False
         
     def ajouter_appareil(self):
         """Ajoute un nouvel appareil"""

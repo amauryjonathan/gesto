@@ -27,13 +27,13 @@
     "F005": {
         "appareil_id": "F005",
         "date_verification": "2025-06-11 07:44:22",
-        "commande_ok": false,
-        "verrou_porte_ok": false,
+        "commande_ok": true,
+        "verrou_porte_ok": true,
         "rotation_tambour_ok": "non_testé",
         "chauffe_ok": "non_testé",
         "essorage_ok": false,
         "sechage_ok": false,
-        "programme_express": "non_testé",
+        "programme_express": "échoué",
         "programme_chauffe": "non_testé",
         "programme_rotation": "non_testé",
         "observations": {
@@ -46,9 +46,9 @@
             "programme_express": "",
             "programme_chauffe": "",
             "programme_rotation": "",
-            "journal_problemes": "",
+            "journal_problemes": "Tentative 1 du programme Express\n[00:00:08] Programme Express (Tentative 1): le programme bug\nTentative 2 du programme Express\n[00:00:25] Programme Express (Tentative 2): apres correction de l'électrique la machine s'emballe",
             "tentatives": {
-                "Express": 0,
+                "Express": 2,
                 "Chauffe": 0,
                 "Rotation": 0
             }

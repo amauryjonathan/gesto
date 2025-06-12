@@ -34,66 +34,73 @@ class GestionnaireAppareils:
                 data = json.load(f)
                 for type_app, liste in data.items():
                     for appareil in liste:
-                        # Création de l'appareil avec les données de base
-                        if type_app == "frigo":
-                            new_appareil = Frigo(
-                                appareil["identifiant"],
-                                appareil["marque"],
-                                appareil["reference"],
-                                appareil["numero_serie"],
-                                appareil["date_arrivee"],
-                                appareil["statut"],
-                                appareil["specifique"]
-                            )
-                        elif type_app == "four":
-                            new_appareil = Four(
-                                appareil["identifiant"],
-                                appareil["marque"],
-                                appareil["reference"],
-                                appareil["numero_serie"],
-                                appareil["date_arrivee"],
-                                appareil["statut"],
-                                appareil["specifique"]
-                            )
-                        elif type_app == "lave_linge":
-                            new_appareil = LaveLinge(
-                                appareil["identifiant"],
-                                appareil["marque"],
-                                appareil["reference"],
-                                appareil["numero_serie"],
-                                appareil["date_arrivee"],
-                                appareil["statut"],
-                                appareil["specifique"]
-                            )
-                        elif type_app == "lave_linge_sechant":
-                            new_appareil = LaveLingeSechant(
-                                appareil["identifiant"],
-                                appareil["marque"],
-                                appareil["reference"],
-                                appareil["numero_serie"],
-                                appareil["date_arrivee"],
-                                appareil["statut"],
-                                appareil["specifique"],
-                                appareil["capacite_sechage"]
-                            )
-                        elif type_app == "lave_vaisselle":
-                            new_appareil = LaveVaisselle(
-                                appareil["identifiant"],
-                                appareil["marque"],
-                                appareil["reference"],
-                                appareil["numero_serie"],
-                                appareil["date_arrivee"],
-                                appareil["statut"],
-                                appareil["specifique"]
-                            )
-                        # Ajout de la localisation si elle existe
-                        if "cellule" in appareil and "emplacement" in appareil and "position" in appareil:
-                            new_appareil.set_localisation(
-                                appareil["cellule"],
-                                appareil["emplacement"],
-                                appareil["position"]
-                            )
-                        self.appareils[type_app].append(new_appareil)
+                        try:
+                            # Création de l'appareil avec les données de base
+                            if type_app == "frigo":
+                                new_appareil = Frigo(
+                                    appareil["identifiant"],
+                                    appareil["marque"],
+                                    appareil["reference"],
+                                    appareil["numero_serie"],
+                                    appareil["date_arrivee"],
+                                    appareil["statut"],
+                                    appareil["specifique"]
+                                )
+                            elif type_app == "four":
+                                new_appareil = Four(
+                                    appareil["identifiant"],
+                                    appareil["marque"],
+                                    appareil["reference"],
+                                    appareil["numero_serie"],
+                                    appareil["date_arrivee"],
+                                    appareil["statut"],
+                                    appareil["specifique"]
+                                )
+                            elif type_app == "lave_linge":
+                                new_appareil = LaveLinge(
+                                    appareil["identifiant"],
+                                    appareil["marque"],
+                                    appareil["reference"],
+                                    appareil["numero_serie"],
+                                    appareil["date_arrivee"],
+                                    appareil["statut"],
+                                    appareil["specifique"]
+                                )
+                            elif type_app == "lave_linge_sechant":
+                                new_appareil = LaveLingeSechant(
+                                    appareil["identifiant"],
+                                    appareil["marque"],
+                                    appareil["reference"],
+                                    appareil["numero_serie"],
+                                    appareil["date_arrivee"],
+                                    appareil["statut"],
+                                    appareil["specifique"],
+                                    appareil["capacite_sechage"]
+                                )
+                            elif type_app == "lave_vaisselle":
+                                new_appareil = LaveVaisselle(
+                                    appareil["identifiant"],
+                                    appareil["marque"],
+                                    appareil["reference"],
+                                    appareil["numero_serie"],
+                                    appareil["date_arrivee"],
+                                    appareil["statut"],
+                                    appareil["specifique"]
+                                )
+                            # Ajout de la localisation si elle existe
+                            if "cellule" in appareil and "emplacement" in appareil and "position" in appareil:
+                                try:
+                                    new_appareil.set_localisation(
+                                        appareil["cellule"],
+                                        appareil["emplacement"],
+                                        appareil["position"]
+                                    )
+                                except ValueError as e:
+                                    print(f"Attention: Erreur de localisation pour {appareil['identifiant']}: {str(e)}")
+                            self.appareils[type_app].append(new_appareil)
+                        except Exception as e:
+                            print(f"Erreur lors du chargement de l'appareil {appareil.get('identifiant', 'inconnu')}: {str(e)}")
+                            continue
         except Exception as e:
             print(f"Erreur lors du chargement du fichier JSON: {str(e)}")
 
@@ -117,7 +124,7 @@ class GestionnaireAppareils:
                 if type_app == "frigo":
                     appareil_dict["specifique"] = appareil.temperature
                 elif type_app == "four":
-                    appareil_dict["specifique"] = appareil.temperature
+                    appareil_dict["specifique"] = appareil.volume
                 elif type_app == "lave_linge":
                     appareil_dict["specifique"] = appareil.capacite
                 elif type_app == "lave_linge_sechant":
